@@ -1,4 +1,4 @@
-import { openDatabase, saveDatabase, getSql } from '../connection.js';
+import { openDatabase, saveDatabase } from '../connection.js';
 
 export interface MigrationRecord {
   id: number;

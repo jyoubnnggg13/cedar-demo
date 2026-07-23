@@ -6,10 +6,7 @@ export {
   DATA_DIR,
   initSql,
   openDatabase,
-  saveDatabase,
-  runSql,
-  execSql,
-  getSql
+  saveDatabase
 } from './connection.js';
 export { migrate, rollbackLast, getAppliedMigrations, migrations } from './migrations/index.js';
 export {
