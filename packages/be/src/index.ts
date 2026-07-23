@@ -1,10 +1,18 @@
 import { migrate, closeDatabase } from './db/index.js';
+import { initializePolicyCache } from './services/policy-cache.js';
+import { registerEvaluateRoutes } from './routes/evaluate.js';
 import express from 'express';
 
 export function initDatabase(): void {
   console.log('Initializing database...');
   migrate();
   console.log('Database initialized.');
+}
+
+export function initializeAuthorization(): void {
+  console.log('Initializing authorization cache...');
+  initializePolicyCache();
+  console.log('Authorization cache initialized.');
 }
 
 export function shutdownDatabase(): void {
@@ -20,8 +28,12 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
 
+// Register API routes
+registerEvaluateRoutes(app);
+
 app.listen(3000, () => {
   initDatabase();
+  initializeAuthorization();
   console.log('Server running on http://localhost:3000');
 });
 
