@@ -1,4 +1,4 @@
-import { getDatabase } from '../connection.js';
+import { openDatabase, saveDatabase, getSql } from '../connection.js';
 
 export interface MigrationRecord {
   id: number;
@@ -100,46 +100,69 @@ const migrations: Migration[] = [
 ];
 
 function bootstrap(): void {
-  const db = getDatabase();
-  db.exec(`
+  const db = openDatabase();
+  db.run(`
     CREATE TABLE IF NOT EXISTS schema_migrations (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL UNIQUE,
       applied_at TEXT NOT NULL DEFAULT (datetime('now'))
-    );
+    )
   `);
 }
 
 export function getAppliedMigrations(): MigrationRecord[] {
   bootstrap();
-  const db = getDatabase();
+  const db = openDatabase();
   const stmt = db.prepare(`
     SELECT id, name, applied_at 
     FROM schema_migrations 
     ORDER BY id ASC
   `);
-  return stmt.all() as MigrationRecord[];
+  
+  const results: MigrationRecord[] = [];
+  while (stmt.step()) {
+    const row = stmt.getAsObject() as unknown as MigrationRecord;
+    results.push(row);
+  }
+  stmt.free();
+  
+  return results;
 }
 
 export function applyMigration(migration: Migration): void {
-  const db = getDatabase();
-  const transaction = db.transaction(() => {
-    db.exec(migration.up);
-    const stmt = db.prepare('INSERT INTO schema_migrations (name) VALUES (?)');
-    stmt.run(migration.name);
-  });
-  transaction();
+  const db = openDatabase();
+  
+  // Split the migration SQL into individual statements
+  const statements = migration.up
+    .split(';')
+    .map(s => s.trim())
+    .filter(s => s.length > 0);
+  
+  for (const stmt of statements) {
+    db.run(stmt);
+  }
+  
+  // Insert migration record
+  db.run('INSERT INTO schema_migrations (name) VALUES (?)', [migration.name]);
+  saveDatabase();
+  
   console.log(`Applied migration: ${migration.name}`);
 }
 
 export function rollbackMigration(migration: Migration): void {
-  const db = getDatabase();
-  const transaction = db.transaction(() => {
-    db.exec(migration.down);
-    const stmt = db.prepare('DELETE FROM schema_migrations WHERE name = ?');
-    stmt.run(migration.name);
-  });
-  transaction();
+  const db = openDatabase();
+  
+  // Split the rollback SQL into individual statements
+  const statements = migration.down
+    .split(';')
+    .map(s => s.trim())
+    .filter(s => s.length > 0);
+  
+  for (const stmt of statements) {
+    db.run(stmt);
+  }
+  
+  saveDatabase();
   console.log(`Rolled back migration: ${migration.name}`);
 }
 

@@ -1,4 +1,16 @@
-export { getDatabase, closeDatabase, resetDatabase, DB_PATH, DATA_DIR } from './connection.js';
+export { 
+  getDatabase, 
+  closeDatabase, 
+  resetDatabase, 
+  DB_PATH, 
+  DATA_DIR,
+  initSql,
+  openDatabase,
+  saveDatabase,
+  runSql,
+  execSql,
+  getSql
+} from './connection.js';
 export { migrate, rollbackLast, getAppliedMigrations, migrations } from './migrations/index.js';
 export {
   policyRepository,
