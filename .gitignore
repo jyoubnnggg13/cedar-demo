@@ -1,5 +1,21 @@
 .pi
 
+# Dependencies
+node_modules/
+packages/*/node_modules/
+
+# Build output
+dist/
+build/
+
+# SQLite data files (do not commit production data)
+*.db
+*.db-shm
+*.db-wal
+
+# IDE
+.vscode/
+.idea/
 
 ADR
 specs
