@@ -9,7 +9,7 @@ export {
   saveDatabase
 } from './connection.js';
 export { migrate, rollbackLast, getAppliedMigrations, migrations } from './migrations/index.js';
-export {
+export { 
   policyRepository,
   policySetRepository,
   resourceRepository,
@@ -17,6 +17,14 @@ export {
   userRepository,
   userRoleRepository
 } from './repositories.js';
+export {
+  seedDatabase,
+  forceSeedDatabase,
+  clearDatabase,
+  getSeedStats,
+  isDatabaseSeeded
+} from './seeds.js';
+export type { SeedData, SeedResult } from './seeds.js';
 export type {
   Migration,
   Policy,
