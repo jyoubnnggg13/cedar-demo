@@ -2,6 +2,7 @@ import { migrate, closeDatabase } from './db/index.js';
 import { initializePolicyCache } from './services/policy-cache.js';
 import { registerEvaluateRoutes } from './routes/evaluate.js';
 import express from 'express';
+import { rolesRouter, resourcesRouter } from './routes/index.js';
 
 export function initDatabase(): void {
   console.log('Initializing database...');
@@ -30,6 +31,9 @@ app.get('/health', (_req, res) => {
 
 // Register API routes
 registerEvaluateRoutes(app);
+// API Routes
+app.use('/api/roles', rolesRouter);
+app.use('/api/resources', resourcesRouter);
 
 app.listen(3000, () => {
   initDatabase();
