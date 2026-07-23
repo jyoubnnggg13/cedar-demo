@@ -14,6 +14,7 @@ export interface Policy {
   resource_types: string | null;
   actions: string | null;
   conditions: string | null;
+  cedar_json: string | null;
   created_at: string;
   updated_at: string;
 }

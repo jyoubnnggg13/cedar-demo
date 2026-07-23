@@ -2,6 +2,7 @@ import { migrate, closeDatabase } from './db/index.js';
 import { initializePolicyCache } from './services/policy-cache.js';
 import { registerEvaluateRoutes } from './routes/evaluate.js';
 import express from 'express';
+import { policyRouter } from './routes/policies.js';
 import { rolesRouter, resourcesRouter } from './routes/index.js';
 
 export function initDatabase(): void {
@@ -29,6 +30,7 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
 
+app.use('/api/policies', policyRouter);
 // Register API routes
 registerEvaluateRoutes(app);
 // API Routes

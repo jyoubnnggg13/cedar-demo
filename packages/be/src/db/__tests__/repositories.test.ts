@@ -86,7 +86,8 @@ describe('Database Schema and Repositories', () => {
         principal_types: 'User',
         resource_types: 'Document',
         actions: 'read,write',
-        conditions: null
+        conditions: null,
+        cedar_json: null
       });
 
       expect(policy.id).toBeGreaterThan(0);
@@ -108,7 +109,8 @@ describe('Database Schema and Repositories', () => {
         principal_types: null,
         resource_types: null,
         actions: null,
-        conditions: null
+        conditions: null,
+        cedar_json: null
       });
 
       expect(policy.policy_set_id).toBe(policySet.id);
@@ -283,7 +285,8 @@ describe('Database Schema and Repositories', () => {
         principal_types: 'User',
         resource_types: 'Document',
         actions: 'read',
-        conditions: null
+        conditions: null,
+        cedar_json: null
       });
 
       const denyPolicy = policyRepository.create({
@@ -294,7 +297,8 @@ describe('Database Schema and Repositories', () => {
         principal_types: 'User',
         resource_types: 'Document',
         actions: 'delete',
-        conditions: null
+        conditions: null,
+        cedar_json: null
       });
 
       // Create resources
