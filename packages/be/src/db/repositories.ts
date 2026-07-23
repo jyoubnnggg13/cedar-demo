@@ -62,8 +62,8 @@ export const policyRepository = {
 
   create(policy: Omit<Policy, 'id' | 'created_at' | 'updated_at'>): Policy {
     const id = execute(
-      `INSERT INTO policies (policy_set_id, name, description, effect, principal_types, resource_types, actions, conditions)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO policies (policy_set_id, name, description, effect, principal_types, resource_types, actions, conditions, cedar_json)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         policy.policy_set_id,
         policy.name,
@@ -72,7 +72,8 @@ export const policyRepository = {
         policy.principal_types,
         policy.resource_types,
         policy.actions,
-        policy.conditions
+        policy.conditions,
+        policy.cedar_json || null
       ]
     );
     return this.findById(id)!;
@@ -113,6 +114,10 @@ export const policyRepository = {
     if (policy.conditions !== undefined) {
       fields.push('conditions = ?');
       values.push(policy.conditions);
+    }
+    if (policy.cedar_json !== undefined) {
+      fields.push('cedar_json = ?');
+      values.push(policy.cedar_json);
     }
 
     if (fields.length === 0) return this.findById(id);

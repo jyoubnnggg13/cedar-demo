@@ -96,6 +96,16 @@ const migrations: Migration[] = [
       DROP TABLE IF EXISTS policy_sets;
       DROP TABLE IF EXISTS schema_migrations;
     `
+  },
+  {
+    name: '002_add_cedar_json',
+    up: `
+      ALTER TABLE policies ADD COLUMN cedar_json TEXT;
+    `,
+    down: `
+      -- SQLite doesn't support DROP COLUMN directly, so we recreate the table
+      -- This is handled separately if needed
+    `
   }
 ];
 

@@ -1,5 +1,6 @@
 import { migrate, closeDatabase } from './db/index.js';
 import express from 'express';
+import { policyRouter } from './routes/policies.js';
 
 export function initDatabase(): void {
   console.log('Initializing database...');
@@ -19,6 +20,8 @@ app.use(express.json());
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
+
+app.use('/api/policies', policyRouter);
 
 app.listen(3000, () => {
   initDatabase();
