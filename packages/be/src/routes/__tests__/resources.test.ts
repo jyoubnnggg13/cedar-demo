@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { openDatabase, resetDatabase, closeDatabase } from '../db/connection.js';
+import { openDatabase, resetDatabase, closeDatabase } from '../../db/connection.js';
 
 // Mock the database connection
-vi.mock('../db/connection.js', () => ({
+vi.mock('../../db/connection.js', () => ({
   openDatabase: vi.fn(),
   saveDatabase: vi.fn(),
   resetDatabase: vi.fn(),
