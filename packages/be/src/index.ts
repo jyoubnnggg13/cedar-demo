@@ -1,5 +1,6 @@
 import { migrate, closeDatabase } from './db/index.js';
 import express from 'express';
+import { rolesRouter, resourcesRouter } from './routes/index.js';
 
 export function initDatabase(): void {
   console.log('Initializing database...');
@@ -19,6 +20,10 @@ app.use(express.json());
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
+
+// API Routes
+app.use('/api/roles', rolesRouter);
+app.use('/api/resources', resourcesRouter);
 
 app.listen(3000, () => {
   initDatabase();
