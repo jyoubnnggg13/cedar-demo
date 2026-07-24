@@ -40,6 +40,7 @@ const ACTIONS: Array<{ value: "read" | "write" | "delete"; label: string }> = [
 
 export function TestPanel() {
   const theme = useTheme();
+  const t = (name: string) => theme.token(name);
   const { evaluate, loading, error } = useEvaluate();
 
   // Form state
@@ -107,15 +108,14 @@ export function TestPanel() {
 
     const response = await evaluate(request);
     setResult(response);
-    setSelectedAction(action);
   }, [principalRole, principalId, resourceType, resourceId, currentResource, selectedActions, evaluate]);
 
   // Styles
   const panelStyle: React.CSSProperties = {
     padding: "1.5rem",
-    borderRadius: "var(--radius-container)",
-    backgroundColor: theme.tokens.color.backgroundPrimary,
-    border: `1px solid var(--color-border-default)`,
+    borderRadius: t("--radius-container"),
+    backgroundColor: t("--color-background-surface"),
+    border: `1px solid ${t("--color-border")}`,
   };
 
   const headerStyle: React.CSSProperties = {
@@ -124,21 +124,21 @@ export function TestPanel() {
     alignItems: "center",
     marginBottom: "1.5rem",
     paddingBottom: "1rem",
-    borderBottom: `1px solid var(--color-border-default)`,
+    borderBottom: `1px solid ${t("--color-border")}`,
   };
 
   const titleStyle: React.CSSProperties = {
-    fontSize: "var(--text-heading-2-size)",
-    fontWeight: "var(--text-heading-2-weight)",
-    color: theme.tokens.color.textPrimary,
+    fontSize: t("--text-heading-1-size"),
+    fontWeight: Number(t("--text-heading-1-weight")),
+    color: t("--color-text-primary"),
     margin: 0,
   };
 
   const badgeStyle: React.CSSProperties = {
     fontSize: "0.75rem",
     padding: "0.25rem 0.5rem",
-    borderRadius: "var(--radius-inner)",
-    backgroundColor: theme.tokens.color.accent,
+    borderRadius: t("--radius-inner"),
+    backgroundColor: t("--color-accent"),
     color: "white",
   };
 
@@ -149,7 +149,7 @@ export function TestPanel() {
   const sectionTitleStyle: React.CSSProperties = {
     fontSize: "0.875rem",
     fontWeight: 600,
-    color: theme.tokens.color.textPrimary,
+    color: t("--color-text-primary"),
     marginBottom: "0.75rem",
   };
 
@@ -168,23 +168,23 @@ export function TestPanel() {
   const labelStyle: React.CSSProperties = {
     fontSize: "0.75rem",
     fontWeight: 500,
-    color: theme.tokens.color.textSecondary,
+    color: t("--color-text-secondary"),
     textTransform: "uppercase",
     letterSpacing: "0.05em",
   };
 
   const inputStyle: React.CSSProperties = {
     padding: "0.5rem 0.75rem",
-    borderRadius: "var(--radius-element)",
-    border: `1px solid var(--color-border-default)`,
-    backgroundColor: theme.tokens.color.backgroundPrimary,
-    color: theme.tokens.color.textPrimary,
+    borderRadius: t("--radius-element"),
+    border: `1px solid ${t("--color-border")}`,
+    backgroundColor: t("--color-background-surface"),
+    color: t("--color-text-primary"),
     fontSize: "0.875rem",
   };
 
   const readonlyFieldStyle: React.CSSProperties = {
     ...inputStyle,
-    backgroundColor: theme.tokens.color.backgroundSecondary,
+    backgroundColor: t("--color-background-muted"),
     cursor: "not-allowed",
   };
 
@@ -200,27 +200,27 @@ export function TestPanel() {
     gap: "0.5rem",
     cursor: "pointer",
     fontSize: "0.875rem",
-    color: theme.tokens.color.textPrimary,
+    color: t("--color-text-primary"),
   };
 
   const buttonStyle: React.CSSProperties = {
     width: "100%",
     padding: "0.75rem 1rem",
-    borderRadius: "var(--radius-element)",
+    borderRadius: t("--radius-element"),
     border: "none",
-    backgroundColor: theme.tokens.color.accent,
+    backgroundColor: t("--color-accent"),
     color: "white",
     fontSize: "1rem",
     fontWeight: 600,
     cursor: loading ? "not-allowed" : "pointer",
     opacity: loading ? 0.7 : 1,
-    transition: `background-color ${theme.tokens.duration.fast}ms ${theme.tokens.easing}`,
+    transition: `background-color ${theme.tokens["--duration-fast"] || "150ms"}`,
   };
 
   const errorStyle: React.CSSProperties = {
     marginTop: "1rem",
     padding: "0.75rem",
-    borderRadius: "var(--radius-element)",
+    borderRadius: t("--radius-element"),
     backgroundColor: "#fef2f2",
     border: "1px solid #fecaca",
     color: "#dc2626",

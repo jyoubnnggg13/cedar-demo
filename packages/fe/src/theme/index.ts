@@ -1,5 +1,4 @@
 import { defineTheme } from "@astryxdesign/core";
-import { neutralTheme } from "@astryxdesign/theme-neutral";
 
 /**
  * Cedar Example 커스텀 테마
@@ -7,66 +6,23 @@ import { neutralTheme } from "@astryxdesign/theme-neutral";
  * Astryx Design System을 기반으로 Cedar Example 프로젝트에 맞는
  * 커스텀 테마를 정의합니다.
  */
-const cedarTheme = defineTheme(neutralTheme, {
-  color: {
-    accent: "#6366f1",
-    neutralStyle: "cool",
-    contrast: "standard",
-  },
-  typography: {
-    scale: {
-      base: 16,
-      ratio: 1.25,
-    },
-    body: {
-      family: "Inter",
-      fallbacks: ["system-ui", "sans-serif"],
-    },
-    heading: {
-      family: "Inter",
-      weight: 600,
-    },
-    code: {
-      family: "JetBrains Mono",
-    },
-  },
-  radius: {
-    base: 4,
-    multiplier: 1,
-  },
-  motion: {
-    fast: 150,
-    medium: 300,
-    ratio: 1.5,
-    easing: "cubic-bezier(0.4, 0, 0.2, 1)",
-  },
-  components: {
-    Button: {
-      variants: {
-        primary: {
-          backgroundColor: "var(--color-accent)",
-          color: "white",
-        },
-        ghost: {
-          backgroundColor: "transparent",
-          border: "1px solid var(--color-border-default)",
-        },
-        danger: {
-          backgroundColor: "#ef4444",
-          color: "white",
-        },
-      },
-    },
-    Card: {
-      variants: {
-        elevated: {
-          boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-        },
-        outlined: {
-          border: "1px solid var(--color-border-default)",
-        },
-      },
-    },
+const cedarTheme = defineTheme({
+  name: "cedar-example",
+  tokens: {
+    "--color-accent": "#6366f1",
+    "--color-background-surface": ["#ffffff", "#18181b"],
+    "--color-background-body": ["#f4f4f5", "#27272a"],
+    "--color-background-muted": ["#e4e4e7", "#3f3f46"],
+    "--color-text-primary": ["#18181b", "#fafafa"],
+    "--color-text-secondary": ["#71717a", "#a1a1aa"],
+    "--color-border": ["#e4e4e7", "#3f3f46"],
+    "--color-border-emphasized": ["#d4d4d8", "#52525b"],
+    "--radius-inner": "4px",
+    "--radius-element": "8px",
+    "--radius-container": "12px",
+    "--radius-page": "16px",
+    "--duration-fast": "150ms",
+    "--duration-medium": "300ms",
   },
 });
 

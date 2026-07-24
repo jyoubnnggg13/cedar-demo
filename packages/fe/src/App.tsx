@@ -1,11 +1,8 @@
 import { Theme } from "@astryxdesign/core";
 import { useTheme } from "@astryxdesign/core";
 import cedarTheme from "./theme";
-import { PolicyEditor, TestPanel } from "./components";
+import { PolicyEditor } from "./components";
 import { useState } from "react";
-
-// CSS 변수 타입 정의
-type CssVar = `--${string}`;
 
 /**
  * Playground 페이지 컴포넌트
@@ -13,7 +10,7 @@ type CssVar = `--${string}`;
  */
 function PlaygroundPage() {
   const theme = useTheme();
-  const [activeView, setActiveView] = useState<"playground" | "editor" | "test">("playground");
+  const [activeView, setActiveView] = useState<"playground" | "editor">("playground");
 
   // 토큰 접근 헬퍼
   const t = (name: string) => theme.token(name);
@@ -44,7 +41,7 @@ function PlaygroundPage() {
     display: "flex",
     gap: "0.5rem",
     marginBottom: "1.5rem",
-    borderBottom: `1px solid ${t("--color-border-default")}`,
+    borderBottom: `1px solid ${t("--color-border")}`,
     paddingBottom: "0.5rem",
   };
 
@@ -64,8 +61,8 @@ function PlaygroundPage() {
   const cardStyle: React.CSSProperties = {
     padding: "1.5rem",
     borderRadius: t("--radius-element"),
-    backgroundColor: t("--color-background-primary"),
-    border: `1px solid ${t("--color-border-default")}`,
+    backgroundColor: t("--color-background-surface"),
+    border: `1px solid ${t("--color-border")}`,
     marginBottom: "1rem",
   };
 
@@ -118,12 +115,6 @@ function PlaygroundPage() {
         >
           Policy Editor
         </button>
-        <button
-          style={tabStyle(activeView === "test")}
-          onClick={() => setActiveView("test")}
-        >
-          Authorization Test
-        </button>
       </div>
 
       {activeView === "playground" && (
@@ -148,8 +139,8 @@ function PlaygroundPage() {
                 </div>
                 <div>
                   <strong>Background:</strong>{" "}
-                  <span style={{ color: t("--color-background-primary") }}>
-                    {t("--color-background-primary")}
+                  <span style={{ color: t("--color-background-surface") }}>
+                    {t("--color-background-surface")}
                   </span>
                 </div>
               </div>
@@ -173,7 +164,7 @@ function PlaygroundPage() {
               style={{
                 padding: "0.5rem 1rem",
                 borderRadius: t("--radius-element"),
-                border: `1px solid ${t("--color-border-default")}`,
+                border: `1px solid ${t("--color-border")}`,
                 backgroundColor: "transparent",
                 cursor: "pointer",
               }}
@@ -185,7 +176,7 @@ function PlaygroundPage() {
               style={{
                 padding: "0.5rem 1rem",
                 borderRadius: t("--radius-element"),
-                border: `1px solid ${t("--color-border-default")}`,
+                border: `1px solid ${t("--color-border")}`,
                 backgroundColor: "transparent",
                 cursor: "pointer",
               }}
@@ -197,7 +188,7 @@ function PlaygroundPage() {
               style={{
                 padding: "0.5rem 1rem",
                 borderRadius: t("--radius-element"),
-                border: `1px solid ${t("--color-border-default")}`,
+                border: `1px solid ${t("--color-border")}`,
                 backgroundColor: "transparent",
                 cursor: "pointer",
               }}
@@ -214,8 +205,6 @@ function PlaygroundPage() {
           onCancel={handleCancelPolicy}
         />
       )}
-
-      {activeView === "test" && <TestPanel />}
     </div>
   );
 }

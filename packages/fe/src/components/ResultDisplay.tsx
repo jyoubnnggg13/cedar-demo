@@ -13,6 +13,7 @@ interface ResultDisplayProps {
 
 export function ResultDisplay({ result }: ResultDisplayProps) {
   const theme = useTheme();
+  const t = (name: string) => theme.token(name);
 
   if (!result) {
     return null;
@@ -29,7 +30,7 @@ export function ResultDisplay({ result }: ResultDisplayProps) {
     alignItems: "center",
     gap: "0.5rem",
     padding: "0.75rem 1.5rem",
-    borderRadius: "var(--radius-element)",
+    borderRadius: t("--radius-element"),
     fontSize: "1.25rem",
     fontWeight: 600,
     backgroundColor: isAllow ? "#22c55e" : "#ef4444",
@@ -47,20 +48,20 @@ export function ResultDisplay({ result }: ResultDisplayProps) {
   const detailsStyle: React.CSSProperties = {
     marginTop: "1rem",
     padding: "1rem",
-    backgroundColor: theme.tokens.color.backgroundSecondary,
-    borderRadius: "var(--radius-element)",
-    border: `1px solid var(--color-border-default)`,
+    backgroundColor: t("--color-background-muted"),
+    borderRadius: t("--radius-element"),
+    border: `1px solid ${t("--color-border")}`,
   };
 
   const labelStyle: React.CSSProperties = {
     fontSize: "0.875rem",
-    color: theme.tokens.color.textSecondary,
+    color: t("--color-text-secondary"),
     marginBottom: "0.25rem",
   };
 
   const valueStyle: React.CSSProperties = {
     fontSize: "1rem",
-    color: theme.tokens.color.textPrimary,
+    color: t("--color-text-primary"),
     fontWeight: 500,
   };
 
@@ -73,7 +74,7 @@ export function ResultDisplay({ result }: ResultDisplayProps) {
 
       {isAllow ? (
         <div style={detailsStyle}>
-          <p style={{ color: theme.tokens.color.textSecondary, margin: 0 }}>
+          <p style={{ color: t("--color-text-secondary"), margin: 0 }}>
             모든 Forbid 정책이 미매칭 → 요청이 허용됩니다
           </p>
         </div>
