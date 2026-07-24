@@ -48,7 +48,6 @@ export function TestPanel() {
   const [resourceType, setResourceType] = useState<Resource["type"]>("document");
   const [resourceId, setResourceId] = useState<string>("doc-001");
   const [selectedActions, setSelectedActions] = useState<Set<string>>(new Set(["read"]));
-  const [selectedAction, setSelectedAction] = useState<"read" | "write" | "delete">("read");
 
   // Result state
   const [result, setResult] = useState<EvaluateResponse | null>(null);

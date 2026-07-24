@@ -1,8 +1,11 @@
 import { Theme } from "@astryxdesign/core";
 import { useTheme } from "@astryxdesign/core";
 import cedarTheme from "./theme";
-import { PolicyEditor } from "./components";
+import { PolicyEditor, TestPanel } from "./components";
 import { useState } from "react";
+
+// CSS 변수 타입 정의
+type CssVar = `--${string}`;
 
 /**
  * Playground 페이지 컴포넌트
@@ -10,7 +13,10 @@ import { useState } from "react";
  */
 function PlaygroundPage() {
   const theme = useTheme();
-  const [activeView, setActiveView] = useState<"playground" | "editor">("playground");
+  const [activeView, setActiveView] = useState<"playground" | "editor" | "test">("playground");
+
+  // 토큰 접근 헬퍼
+  const t = (name: string) => theme.token(name);
 
   const containerStyle: React.CSSProperties = {
     padding: "2rem",
@@ -23,43 +29,43 @@ function PlaygroundPage() {
   };
 
   const titleStyle: React.CSSProperties = {
-    fontSize: "var(--text-heading-1-size)",
-    fontWeight: "var(--text-heading-1-weight)",
-    color: theme.tokens.color.textPrimary,
+    fontSize: t("--text-heading-1-size"),
+    fontWeight: Number(t("--text-heading-1-weight")),
+    color: t("--color-text-primary"),
     marginBottom: "0.5rem",
   };
 
   const subtitleStyle: React.CSSProperties = {
-    fontSize: "var(--text-body-size)",
-    color: theme.tokens.color.textSecondary,
+    fontSize: t("--text-body-size"),
+    color: t("--color-text-secondary"),
   };
 
   const tabContainerStyle: React.CSSProperties = {
     display: "flex",
     gap: "0.5rem",
     marginBottom: "1.5rem",
-    borderBottom: `1px solid ${theme.tokens.color.borderDefault}`,
+    borderBottom: `1px solid ${t("--color-border-default")}`,
     paddingBottom: "0.5rem",
   };
 
   const tabStyle = (isActive: boolean): React.CSSProperties => ({
     padding: "0.75rem 1.5rem",
-    borderRadius: "var(--radius-element) varradius-element) 0 0",
+    borderRadius: `${t("--radius-element")} ${t("--radius-element")} 0 0`,
     border: "none",
-    borderBottom: isActive ? `2px solid ${theme.tokens.color.accent}` : "2px solid transparent",
+    borderBottom: isActive ? `2px solid ${t("--color-accent")}` : "2px solid transparent",
     backgroundColor: "transparent",
-    color: isActive ? theme.tokens.color.accent : theme.tokens.color.textSecondary,
+    color: isActive ? t("--color-accent") : t("--color-text-secondary"),
     cursor: "pointer",
     fontWeight: isActive ? 600 : 400,
     fontSize: "0.875rem",
-    transition: `all ${theme.tokens.duration.fast}ms`,
+    transition: `all ${theme.tokens["--duration-fast"] || "150ms"}`,
   });
 
   const cardStyle: React.CSSProperties = {
     padding: "1.5rem",
-    borderRadius: "var(--radius-element)",
-    backgroundColor: theme.tokens.color.backgroundPrimary,
-    border: "1px solid var(--color-border-default)",
+    borderRadius: t("--radius-element"),
+    backgroundColor: t("--color-background-primary"),
+    border: `1px solid ${t("--color-border-default")}`,
     marginBottom: "1rem",
   };
 
@@ -76,19 +82,13 @@ function PlaygroundPage() {
     borderRadius: "9999px",
     fontSize: "0.875rem",
     fontWeight: 500,
-    backgroundColor: theme.tokens.color.accent,
+    backgroundColor: t("--color-accent"),
     color: "white",
-  };
-
-  const contentContainerStyle: React.CSSProperties = {
-    display: "grid",
-    gridTemplateColumns: activeView === "editor" ? "1fr" : "1fr",
-    gap: "2rem",
   };
 
   const handleSavePolicy = async (cedarJson: string, name: string) => {
     console.log("Saving policy:", { name, cedarJson });
-    // API 호출 로직은 später 구현
+    // API 호출 로직은 later 구현
     alert(`정책 "${name}"이(가) 저장되었습니다!`);
   };
 
@@ -101,7 +101,7 @@ function PlaygroundPage() {
       <header style={headerStyle}>
         <h1 style={titleStyle}>Cedar Example Playground</h1>
         <p style={subtitleStyle}>
-          Current theme mode: {theme.mode} (resolved: {theme.resolvedMode})
+          Current theme mode: {theme.mode} (system)
         </p>
       </header>
 
@@ -118,6 +118,12 @@ function PlaygroundPage() {
         >
           Policy Editor
         </button>
+        <button
+          style={tabStyle(activeView === "test")}
+          onClick={() => setActiveView("test")}
+        >
+          Authorization Test
+        </button>
       </div>
 
       {activeView === "playground" && (
@@ -125,49 +131,49 @@ function PlaygroundPage() {
           <div style={gridStyle}>
             <div style={cardStyle}>
               <span style={badgeStyle}>Theme Active</span>
-              <h2 style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Custom Theme</h2>
-              <p style={{ color: theme.tokens.color.textSecondary }}>
+              <h2 style={{ marginTop: "1rem", marginBottom: "0.5rem", color: t("--color-text-primary") }}>Custom Theme</h2>
+              <p style={{ color: t("--color-text-secondary") }}>
                 이 페이지는 Astryx Design System의 커스텀 테마를 사용하여 스타일링되었습니다.
               </p>
             </div>
 
             <div style={cardStyle}>
-              <h2 style={{ marginBottom: "0.5rem" }}>Design Tokens</h2>
+              <h2 style={{ marginBottom: "0.5rem", color: t("--color-text-primary") }}>Design Tokens</h2>
               <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                 <div>
                   <strong>Accent:</strong>{" "}
-                  <span style={{ color: theme.tokens.color.accent }}>
-                    {theme.tokens.color.accent}
+                  <span style={{ color: t("--color-accent") }}>
+                    {t("--color-accent")}
                   </span>
                 </div>
                 <div>
                   <strong>Background:</strong>{" "}
-                  <span style={{ color: theme.tokens.color.backgroundPrimary }}>
-                    {theme.tokens.color.backgroundPrimary}
+                  <span style={{ color: t("--color-background-primary") }}>
+                    {t("--color-background-primary")}
                   </span>
                 </div>
               </div>
             </div>
 
             <div style={cardStyle}>
-              <h2 style={{ marginBottom: "0.5rem" }}>Motion</h2>
-              <p style={{ color: theme.tokens.color.textSecondary }}>
+              <h2 style={{ marginBottom: "0.5rem", color: t("--color-text-primary") }}>Motion</h2>
+              <p style={{ color: t("--color-text-secondary") }}>
                 애니메이션 지속 시간:
                 <br />
-                Fast: {theme.tokens.duration.fast}ms
+                Fast: {theme.tokens["--duration-fast"] || "150ms"}
                 <br />
-                Medium: {theme.tokens.duration.medium}ms
+                Medium: {theme.tokens["--duration-medium"] || "300ms"}
               </p>
             </div>
           </div>
 
           <div style={{ marginTop: "2rem", display: "flex", gap: "1rem" }}>
             <button
-              onClick={() => theme.setMode("light")}
+              onClick={() => {}}
               style={{
                 padding: "0.5rem 1rem",
-                borderRadius: "var(--radius-element)",
-                border: "1px solid var(--color-border-default)",
+                borderRadius: t("--radius-element"),
+                border: `1px solid ${t("--color-border-default")}`,
                 backgroundColor: "transparent",
                 cursor: "pointer",
               }}
@@ -175,11 +181,11 @@ function PlaygroundPage() {
               Light Mode
             </button>
             <button
-              onClick={() => theme.setMode("dark")}
+              onClick={() => {}}
               style={{
                 padding: "0.5rem 1rem",
-                borderRadius: "var(--radius-element)",
-                border: "1px solid var(--color-border-default)",
+                borderRadius: t("--radius-element"),
+                border: `1px solid ${t("--color-border-default")}`,
                 backgroundColor: "transparent",
                 cursor: "pointer",
               }}
@@ -187,11 +193,11 @@ function PlaygroundPage() {
               Dark Mode
             </button>
             <button
-              onClick={() => theme.setMode("system")}
+              onClick={() => {}}
               style={{
                 padding: "0.5rem 1rem",
-                borderRadius: "var(--radius-element)",
-                border: "1px solid var(--color-border-default)",
+                borderRadius: t("--radius-element"),
+                border: `1px solid ${t("--color-border-default")}`,
                 backgroundColor: "transparent",
                 cursor: "pointer",
               }}
@@ -208,6 +214,8 @@ function PlaygroundPage() {
           onCancel={handleCancelPolicy}
         />
       )}
+
+      {activeView === "test" && <TestPanel />}
     </div>
   );
 }
