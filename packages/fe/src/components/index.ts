@@ -13,3 +13,5 @@ export type { PolicyEditorProps } from "./PolicyEditor";
 
 export { TestPanel } from "./TestPanel";
 export { ResultDisplay } from "./ResultDisplay";
+
+export { PolicyList } from "./PolicyList";
