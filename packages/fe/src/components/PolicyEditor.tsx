@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from "react";
-import { useTheme, TextInput, TextArea } from "@astryxdesign/core";
+import { useTheme, TextInput, TextArea, CodeBlock } from "@astryxdesign/core";
 import { StepperProgress } from "./StepperProgress";
 import { SelectableCard } from "./SelectionCard";
 import { StepContainer } from "./StepContainer";
@@ -327,19 +327,7 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
     marginBottom: "0.5rem",
   };
 
-  const codeBlockStyle: React.CSSProperties = {
-    fontFamily: "JetBrains Mono, monospace",
-    fontSize: "0.75rem",
-    color: t("--color-text-secondary"),
-    whiteSpace: "pre-wrap" as const,
-    wordBreak: "break-all" as const,
-    margin: 0,
-    padding: "0.75rem",
-    backgroundColor: t("--color-background-body"),
-    borderRadius: t("--radius-inner"),
-    overflow: "auto" as const,
-    maxHeight: "200px",
-  };
+  // codeBlockStyle 제거 - CodeBlock 컴포넌트가 대신 사용
 
   const footerStyle: React.CSSProperties = {
     display: "flex",
@@ -527,7 +515,15 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
 
       <div style={previewContainerStyle}>
         <h3 style={previewTitleStyle}>Cedar JSON Preview</h3>
-        <pre style={codeBlockStyle}>{cedarJson}</pre>
+        <CodeBlock
+          code={cedarJson}
+          language="json"
+          container="section"
+          size="sm"
+          hasCopyButton
+          isWrapped
+          maxHeight={200}
+        />
       </div>
 
       <footer style={footerStyle}>
