@@ -2,8 +2,8 @@
 export { StepperProgress } from "./StepperProgress";
 export type { StepperProgressProps } from "./StepperProgress";
 
-export { SelectionCard } from "./SelectionCard";
-export type { SelectionCardProps } from "./SelectionCard";
+export { SelectableCard, SelectionCard } from "./SelectionCard";
+export type { SelectableCardProps, SelectionCardProps } from "./SelectionCard";
 
 export { StepContainer } from "./StepContainer";
 export type { StepContainerProps } from "./StepContainer";

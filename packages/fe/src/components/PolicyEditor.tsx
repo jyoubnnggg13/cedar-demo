@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { useTheme } from "@astryxdesign/core";
 import { StepperProgress } from "./StepperProgress";
-import { SelectionCard } from "./SelectionCard";
+import { SelectableCard } from "./SelectionCard";
 import { StepContainer } from "./StepContainer";
 import type {
   CedarPolicy,
@@ -397,13 +397,17 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
               onSelectNone={() => {}}
             >
               {principalOptions.map((option) => (
-                <SelectionCard
+                <SelectableCard
                   key={option.value}
-                  title={option.label}
-                  description={option.description}
-                  selected={formState.principalRole === option.value}
-                  onClick={() => handlePrincipalSelect(option.value)}
-                />
+                  label={option.label}
+                  isSelected={formState.principalRole === option.value}
+                  onChange={(isSelected) => isSelected && handlePrincipalSelect(option.value)}
+                >
+                  <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
+                    <span style={{ fontSize: "0.875rem", fontWeight: 600, color: theme.token("--color-text-primary") }}>{option.label}</span>
+                    {option.description && <span style={{ fontSize: "0.75rem", color: theme.token("--color-text-secondary") }}>{option.description}</span>}
+                  </div>
+                </SelectableCard>
               ))}
             </StepContainer>
           </div>
@@ -419,13 +423,17 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
             onSelectNone={() => {}}
           >
             {resourceOptions.map((option) => (
-              <SelectionCard
+              <SelectableCard
                 key={option.value}
-                title={option.label}
-                description={option.description}
-                selected={formState.resourceType === option.value}
-                onClick={() => handleResourceSelect(option.value)}
-              />
+                label={option.label}
+                isSelected={formState.resourceType === option.value}
+                onChange={(isSelected) => isSelected && handleResourceSelect(option.value)}
+              >
+                <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
+                  <span style={{ fontSize: "0.875rem", fontWeight: 600, color: theme.token("--color-text-primary") }}>{option.label}</span>
+                  {option.description && <span style={{ fontSize: "0.75rem", color: theme.token("--color-text-secondary") }}>{option.description}</span>}
+                </div>
+              </SelectableCard>
             ))}
           </StepContainer>
         );
@@ -441,13 +449,23 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
             onSelectNone={handleSelectNoneActions}
           >
             {actionOptions.map((option) => (
-              <SelectionCard
+              <SelectableCard
                 key={option.value}
-                title={option.label}
-                description={option.description}
-                selected={formState.actions.includes(option.value)}
-                onClick={() => handleActionToggle(option.value)}
-              />
+                label={option.label}
+                isSelected={formState.actions.includes(option.value)}
+                onChange={(isSelected) => {
+                  if (isSelected) {
+                    handleActionToggle(option.value);
+                  } else {
+                    handleActionToggle(option.value);
+                  }
+                }}
+              >
+                <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
+                  <span style={{ fontSize: "0.875rem", fontWeight: 600, color: theme.token("--color-text-primary") }}>{option.label}</span>
+                  {option.description && <span style={{ fontSize: "0.75rem", color: theme.token("--color-text-secondary") }}>{option.description}</span>}
+                </div>
+              </SelectableCard>
             ))}
           </StepContainer>
         );
