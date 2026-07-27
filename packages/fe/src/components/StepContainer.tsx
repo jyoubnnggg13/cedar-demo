@@ -1,5 +1,5 @@
 import React from "react";
-import { useTheme } from "@astryxdesign/core";
+import { useTheme, Button } from "@astryxdesign/core";
 
 /**
  * StepContainer Props
@@ -70,28 +70,7 @@ export const StepContainer: React.FC<StepContainerProps> = ({
     gap: "0.5rem",
   };
 
-  const buttonBaseStyle: React.CSSProperties = {
-    padding: "0.25rem 0.75rem",
-    fontSize: "0.75rem",
-    fontWeight: 500,
-    borderRadius: t("--radius-element"),
-    cursor: "pointer",
-    transition: `all ${theme.tokens["--duration-fast"] || "150ms"}`,
-    border: "none",
-  };
-
-  const selectAllButtonStyle: React.CSSProperties = {
-    ...buttonBaseStyle,
-    backgroundColor: t("--color-accent"),
-    color: "white",
-  };
-
-  const selectNoneButtonStyle: React.CSSProperties = {
-    ...buttonBaseStyle,
-    backgroundColor: "transparent",
-    color: t("--color-text-secondary"),
-    border: `1px solid ${t("--color-border")}`,
-  };
+  // button styles 제거 - Astryx Button 사용
 
   const contentStyle: React.CSSProperties = {
     display: "flex",
@@ -119,20 +98,18 @@ export const StepContainer: React.FC<StepContainerProps> = ({
         </div>
         {showBulkActions && (
           <div style={bulkActionsStyle}>
-            <button
-              style={selectAllButtonStyle}
+            <Button
+              label="Select All"
+              variant="primary"
+              size="sm"
               onClick={onSelectAll}
-              type="button"
-            >
-              Select All
-            </button>
-            <button
-              style={selectNoneButtonStyle}
+            />
+            <Button
+              label="None"
+              variant="secondary"
+              size="sm"
               onClick={onSelectNone}
-              type="button"
-            >
-              None
-            </button>
+            />
           </div>
         )}
       </div>

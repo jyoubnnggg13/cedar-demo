@@ -8,7 +8,7 @@
  */
 
 import { useState, useCallback } from "react";
-import { useTheme, Badge } from "@astryxdesign/core";
+import { useTheme, Badge, Button } from "@astryxdesign/core";
 import { PolicyList } from "../components/PolicyList";
 import { PolicyEditor } from "../components/PolicyEditor";
 import { TestPanel } from "../components/TestPanel";
@@ -216,17 +216,7 @@ export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
     marginBottom: "0.5rem",
   };
 
-  const emptyStateButtonStyle: React.CSSProperties = {
-    marginTop: "1rem",
-    padding: "0.75rem 1.5rem",
-    fontSize: "0.875rem",
-    fontWeight: 500,
-    borderRadius: t("--radius-element"),
-    border: "none",
-    backgroundColor: t("--color-accent"),
-    color: "white",
-    cursor: "pointer",
-  };
+  // emptyStateButtonStyle 제거 - Astryx Button 사용
 
   return (
     <div style={containerStyle}>
@@ -290,9 +280,12 @@ export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
               <div style={emptyStateStyle}>
                 <p style={emptyStateTitleStyle}>편집할 정책을 선택하세요</p>
                 <p>사이드바에서 정책을 선택하거나 새 정책을 만드세요.</p>
-                <button style={emptyStateButtonStyle} onClick={handleNewPolicy}>
-                  + 새 정책 만들기
-                </button>
+                <Button
+                  label="+ 새 정책 만들기"
+                  variant="primary"
+                  onClick={handleNewPolicy}
+                  style={{ marginTop: "1rem" }}
+                />
               </div>
             )
           ) : (

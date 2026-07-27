@@ -5,8 +5,7 @@
  */
 
 import { useState, useEffect, useCallback } from "react";
-import { useTheme } from "@astryxdesign/core";
-import { TextInput } from "@astryxdesign/core";
+import { useTheme, Button, TextInput } from "@astryxdesign/core";
 import type { Policy } from "../types/policy";
 
 interface PolicyListProps {
@@ -72,16 +71,7 @@ const PolicyListItem: React.FC<PolicyListItemProps> = ({
     marginTop: "0.5rem",
   };
 
-  const actionButtonStyle: React.CSSProperties = {
-    padding: "0.25rem 0.5rem",
-    fontSize: "0.625rem",
-    borderRadius: t("--radius-inner"),
-    border: "none",
-    cursor: "pointer",
-    opacity: isSelected ? 0.9 : 1,
-    backgroundColor: isSelected ? "rgba(255,255,255,0.2)" : t("--color-background-muted"),
-    color: isSelected ? "white" : t("--color-text-secondary"),
-  };
+  // actionButtonStyle 제거 - Astryx Button 사용
 
   return (
     <div style={itemStyle} onClick={onClick}>
@@ -92,14 +82,20 @@ const PolicyListItem: React.FC<PolicyListItemProps> = ({
       {(onEdit || onDelete) && (
         <div style={actionsStyle} onClick={(e) => e.stopPropagation()}>
           {onEdit && (
-            <button style={actionButtonStyle} onClick={onEdit}>
-              수정
-            </button>
+            <Button
+              label="수정"
+              variant="ghost"
+              size="sm"
+              onClick={onEdit}
+            />
           )}
           {onDelete && (
-            <button style={actionButtonStyle} onClick={onDelete}>
-              삭제
-            </button>
+            <Button
+              label="삭제"
+              variant="ghost"
+              size="sm"
+              onClick={onDelete}
+            />
           )}
         </div>
       )}
@@ -191,19 +187,7 @@ export const PolicyList: React.FC<PolicyListProps> = ({
 
 
 
-  const newButtonStyle: React.CSSProperties = {
-    width: "100%",
-    padding: "0.625rem 1rem",
-    fontSize: "0.875rem",
-    fontWeight: 500,
-    borderRadius: t("--radius-element"),
-    border: "none",
-    backgroundColor: t("--color-accent"),
-    color: "white",
-    cursor: "pointer",
-    marginTop: "0.75rem",
-    transition: `background-color ${theme.tokens["--duration-fast"] || "150ms"}`,
-  };
+  // newButtonStyle 제거 - Astryx Button 사용
 
   const listContainerStyle: React.CSSProperties = {
     flex: 1,
@@ -274,9 +258,12 @@ export const PolicyList: React.FC<PolicyListProps> = ({
           isLabelHidden
           size="sm"
         />
-        <button style={newButtonStyle} onClick={handleNewPolicy}>
-          + 새 정책
-        </button>
+        <Button
+          label="+ 새 정책"
+          variant="primary"
+          onClick={handleNewPolicy}
+          style={{ width: "100%", marginTop: "0.75rem" }}
+        />
       </div>
 
       <div style={listContainerStyle}>

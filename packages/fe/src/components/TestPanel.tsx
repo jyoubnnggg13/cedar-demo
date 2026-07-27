@@ -6,7 +6,7 @@
  */
 
 import { useState, useCallback, useEffect } from "react";
-import { useTheme, TextInput, Selector, Badge } from "@astryxdesign/core";
+import { useTheme, TextInput, Selector, Badge, Button } from "@astryxdesign/core";
 import { useEvaluate } from "../hooks/useEvaluate";
 import { ResultDisplay } from "./ResultDisplay";
 import type { Principal, Resource, EvaluateRequest, EvaluateResponse } from "../types/evaluation";
@@ -184,19 +184,7 @@ export function TestPanel() {
     color: t("--color-text-primary"),
   };
 
-  const buttonStyle: React.CSSProperties = {
-    width: "100%",
-    padding: "0.75rem 1rem",
-    borderRadius: t("--radius-element"),
-    border: "none",
-    backgroundColor: t("--color-accent"),
-    color: "white",
-    fontSize: "1rem",
-    fontWeight: 600,
-    cursor: loading ? "not-allowed" : "pointer",
-    opacity: loading ? 0.7 : 1,
-    transition: `background-color ${theme.tokens["--duration-fast"] || "150ms"}`,
-  };
+  // buttonStyle 제거 - Astryx Button 사용
 
   const errorStyle: React.CSSProperties = {
     marginTop: "1rem",
@@ -319,13 +307,14 @@ export function TestPanel() {
 
       {/* Evaluate Button */}
       <div>
-        <button
+        <Button
+          label={loading ? "Evaluating..." : "Evaluate Request"}
+          variant="primary"
           onClick={handleEvaluate}
-          disabled={loading || selectedActions.size === 0}
-          style={buttonStyle}
-        >
-          {loading ? "Evaluating..." : "Evaluate Request"}
-        </button>
+          isDisabled={loading || selectedActions.size === 0}
+          isLoading={loading}
+          style={{ width: "100%" }}
+        />
         {selectedActions.size === 0 && (
           <p style={{ ...errorStyle, backgroundColor: "#fef3c7", borderColor: "#fcd34d", color: "#92400e", marginTop: "0.5rem" }}>
             최소 1개의 액션을 선택해주세요.

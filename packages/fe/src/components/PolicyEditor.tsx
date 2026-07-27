@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from "react";
-import { useTheme, TextInput, TextArea, CodeBlock } from "@astryxdesign/core";
+import { useTheme, TextInput, TextArea, CodeBlock, Button } from "@astryxdesign/core";
 import { StepperProgress } from "./StepperProgress";
 import { SelectableCard } from "./SelectionCard";
 import { StepContainer } from "./StepContainer";
@@ -287,30 +287,7 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
     gap: "1rem",
   };
 
-  const buttonBaseStyle: React.CSSProperties = {
-    padding: "0.75rem 1.5rem",
-    fontSize: "0.875rem",
-    fontWeight: 500,
-    borderRadius: t("--radius-element"),
-    cursor: "pointer",
-    transition: `all ${theme.tokens["--duration-fast"] || "150ms"}`,
-    border: "none",
-  };
-
-  const primaryButtonStyle: React.CSSProperties = {
-    ...buttonBaseStyle,
-    backgroundColor: t("--color-accent"),
-    color: "white",
-    opacity: isAllValid ? 1 : 0.5,
-    cursor: isAllValid && !isSaving ? "pointer" : "not-allowed",
-  };
-
-  const secondaryButtonStyle: React.CSSProperties = {
-    ...buttonBaseStyle,
-    backgroundColor: "transparent",
-    color: t("--color-text-secondary"),
-    border: `1px solid ${t("--color-border")}`,
-  };
+  // button styles 제거 - Astryx Button 사용
 
   const previewContainerStyle: React.CSSProperties = {
     marginTop: "1.5rem",
@@ -492,22 +469,18 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
       {renderStepContent()}
 
       <div style={navigationStyle}>
-        <button
-          style={secondaryButtonStyle}
+        <Button
+          label="← Previous"
+          variant="secondary"
           onClick={handlePrevious}
-          disabled={currentStep === 0}
-          type="button"
-        >
-          ← Previous
-        </button>
+          isDisabled={currentStep === 0}
+        />
         {currentStep < steps.length - 1 ? (
-          <button
-            style={primaryButtonStyle}
+          <Button
+            label="Next →"
+            variant="primary"
             onClick={handleNext}
-            type="button"
-          >
-            Next →
-          </button>
+          />
         ) : (
           <div />
         )}
@@ -527,21 +500,18 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
       </div>
 
       <footer style={footerStyle}>
-        <button
-          style={secondaryButtonStyle}
+        <Button
+          label="Cancel"
+          variant="secondary"
           onClick={handleCancel}
-          type="button"
-        >
-          Cancel
-        </button>
-        <button
-          style={primaryButtonStyle}
+        />
+        <Button
+          label={isSaving ? "Saving..." : "Save Policy"}
+          variant="primary"
           onClick={handleSave}
-          disabled={!isAllValid || isSaving}
-          type="button"
-        >
-          {isSaving ? "Saving..." : "Save Policy"}
-        </button>
+          isDisabled={!isAllValid || isSaving}
+          isLoading={isSaving}
+        />
       </footer>
     </div>
   );
