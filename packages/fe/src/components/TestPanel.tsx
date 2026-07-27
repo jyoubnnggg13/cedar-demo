@@ -6,7 +6,7 @@
  */
 
 import { useState, useCallback, useEffect } from "react";
-import { useTheme, TextInput } from "@astryxdesign/core";
+import { useTheme, TextInput, Selector } from "@astryxdesign/core";
 import { useEvaluate } from "../hooks/useEvaluate";
 import { ResultDisplay } from "./ResultDisplay";
 import type { Principal, Resource, EvaluateRequest, EvaluateResponse } from "../types/evaluation";
@@ -230,30 +230,28 @@ export function TestPanel() {
           <label style={labelStyle}>Principal</label>
           <div style={fieldGroupStyle}>
             <div style={fieldStyle}>
-              <label style={{ ...labelStyle, fontSize: "0.75rem" }}>Role</label>
-              <select
+              <Selector
+                label="Role"
                 value={principalRole}
-                onChange={(e) => setPrincipalRole(e.target.value as Principal["role"])}
-                style={inputStyle}
-              >
-                <option value="admin">Admin</option>
-                <option value="editor">Editor</option>
-                <option value="viewer">Viewer</option>
-              </select>
+                onChange={(value) => setPrincipalRole(value as Principal["role"])}
+                options={[
+                  { value: "admin", label: "Admin" },
+                  { value: "editor", label: "Editor" },
+                  { value: "viewer", label: "Viewer" },
+                ]}
+                size="sm"
+                isLabelHidden
+              />
             </div>
             <div style={fieldStyle}>
-              <label style={{ ...labelStyle, fontSize: "0.75rem" }}>User ID</label>
-              <select
+              <Selector
+                label="User ID"
                 value={principalId}
-                onChange={(e) => setPrincipalId(e.target.value)}
-                style={inputStyle}
-              >
-                {SAMPLE_USERS[principalRole]?.map((userId) => (
-                  <option key={userId} value={userId}>
-                    {userId}
-                  </option>
-                ))}
-              </select>
+                onChange={(value) => setPrincipalId(value)}
+                options={SAMPLE_USERS[principalRole]?.map((userId) => ({ value: userId, label: userId })) || []}
+                size="sm"
+                isLabelHidden
+              />
             </div>
           </div>
         </div>
@@ -263,29 +261,27 @@ export function TestPanel() {
           <label style={labelStyle}>Resource</label>
           <div style={fieldGroupStyle}>
             <div style={fieldStyle}>
-              <label style={{ ...labelStyle, fontSize: "0.75rem" }}>Type</label>
-              <select
+              <Selector
+                label="Type"
                 value={resourceType}
-                onChange={(e) => setResourceType(e.target.value as Resource["type"])}
-                style={inputStyle}
-              >
-                <option value="document">Document</option>
-                <option value="issue">Issue</option>
-              </select>
+                onChange={(value) => setResourceType(value as Resource["type"])}
+                options={[
+                  { value: "document", label: "Document" },
+                  { value: "issue", label: "Issue" },
+                ]}
+                size="sm"
+                isLabelHidden
+              />
             </div>
             <div style={fieldStyle}>
-              <label style={{ ...labelStyle, fontSize: "0.75rem" }}>Resource ID</label>
-              <select
+              <Selector
+                label="Resource ID"
                 value={resourceId}
-                onChange={(e) => setResourceId(e.target.value)}
-                style={inputStyle}
-              >
-                {SAMPLE_RESOURCES[resourceType]?.map((resource) => (
-                  <option key={resource.id} value={resource.id}>
-                    {resource.id}
-                  </option>
-                ))}
-              </select>
+                onChange={(value) => setResourceId(value)}
+                options={SAMPLE_RESOURCES[resourceType]?.map((resource) => ({ value: resource.id, label: resource.id })) || []}
+                size="sm"
+                isLabelHidden
+              />
             </div>
           </div>
           {/* Resource Attributes (readonly) */}
