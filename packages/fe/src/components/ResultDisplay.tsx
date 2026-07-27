@@ -4,7 +4,7 @@
  * Displays the authorization evaluation result with visual badges.
  */
 
-import { useTheme } from "@astryxdesign/core";
+import { Badge } from "@astryxdesign/core";
 import type { EvaluateResponse } from "../types/evaluation";
 
 interface ResultDisplayProps {
@@ -12,9 +12,6 @@ interface ResultDisplayProps {
 }
 
 export function ResultDisplay({ result }: ResultDisplayProps) {
-  const theme = useTheme();
-  const t = (name: string) => theme.token(name);
-
   if (!result) {
     return null;
   }
@@ -23,26 +20,6 @@ export function ResultDisplay({ result }: ResultDisplayProps) {
 
   const containerStyle: React.CSSProperties = {
     marginTop: "1rem",
-  };
-
-  const badgeStyle: React.CSSProperties = {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "0.5rem",
-    padding: "0.75rem 1.5rem",
-    borderRadius: t("--radius-element"),
-    fontSize: "1.25rem",
-    fontWeight: 600,
-    backgroundColor: isAllow ? "#22c55e" : "#ef4444",
-    color: "white",
-  };
-
-  const iconStyle: React.CSSProperties = {
-    width: "1.5rem",
-    height: "1.5rem",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
   };
 
   const detailsStyle: React.CSSProperties = {
@@ -67,10 +44,11 @@ export function ResultDisplay({ result }: ResultDisplayProps) {
 
   return (
     <div style={containerStyle}>
-      <div style={badgeStyle}>
-        <span style={iconStyle}>{isAllow ? "✓" : "✗"}</span>
-        <span>{result.decision}</span>
-      </div>
+      <Badge
+        variant={isAllow ? "success" : "error"}
+        label={result.decision}
+        icon={isAllow ? "✓" : "✗"}
+      />
 
       {isAllow ? (
         <div style={detailsStyle}>

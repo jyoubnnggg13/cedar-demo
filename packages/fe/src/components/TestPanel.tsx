@@ -6,7 +6,7 @@
  */
 
 import { useState, useCallback, useEffect } from "react";
-import { useTheme, TextInput, Selector } from "@astryxdesign/core";
+import { useTheme, TextInput, Selector, Badge } from "@astryxdesign/core";
 import { useEvaluate } from "../hooks/useEvaluate";
 import { ResultDisplay } from "./ResultDisplay";
 import type { Principal, Resource, EvaluateRequest, EvaluateResponse } from "../types/evaluation";
@@ -134,13 +134,7 @@ export function TestPanel() {
     margin: 0,
   };
 
-  const badgeStyle: React.CSSProperties = {
-    fontSize: "0.75rem",
-    padding: "0.25rem 0.5rem",
-    borderRadius: t("--radius-inner"),
-    backgroundColor: t("--color-accent"),
-    color: "white",
-  };
+
 
   const sectionStyle: React.CSSProperties = {
     marginBottom: "1.5rem",
@@ -218,7 +212,7 @@ export function TestPanel() {
     <div style={panelStyle}>
       <header style={headerStyle}>
         <h2 style={titleStyle}>Authorization Test</h2>
-        <span style={badgeStyle}>Playground</span>
+        <Badge variant="blue" label="Playground" />
       </header>
 
       {/* Request Configuration */}

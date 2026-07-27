@@ -8,7 +8,7 @@
  */
 
 import { useState, useCallback } from "react";
-import { useTheme } from "@astryxdesign/core";
+import { useTheme, Badge } from "@astryxdesign/core";
 import { PolicyList } from "../components/PolicyList";
 import { PolicyEditor } from "../components/PolicyEditor";
 import { TestPanel } from "../components/TestPanel";
@@ -253,17 +253,7 @@ export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
               : "Playground"}
           </h1>
           {selectedPolicy && !isCreatingNew && (
-            <span
-              style={{
-                fontSize: "0.75rem",
-                padding: "0.25rem 0.75rem",
-                borderRadius: t("--radius-inner"),
-                backgroundColor: t("--color-accent"),
-                color: "white",
-              }}
-            >
-              선택됨
-            </span>
+            <Badge variant="info" label="선택됨" />
           )}
         </div>
 
