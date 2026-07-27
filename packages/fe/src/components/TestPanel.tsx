@@ -6,7 +6,7 @@
  */
 
 import { useState, useCallback, useEffect } from "react";
-import { useTheme } from "@astryxdesign/core";
+import { useTheme, TextInput } from "@astryxdesign/core";
 import { useEvaluate } from "../hooks/useEvaluate";
 import { ResultDisplay } from "./ResultDisplay";
 import type { Principal, Resource, EvaluateRequest, EvaluateResponse } from "../types/evaluation";
@@ -173,20 +173,7 @@ export function TestPanel() {
     letterSpacing: "0.05em",
   };
 
-  const inputStyle: React.CSSProperties = {
-    padding: "0.5rem 0.75rem",
-    borderRadius: t("--radius-element"),
-    border: `1px solid ${t("--color-border")}`,
-    backgroundColor: t("--color-background-surface"),
-    color: t("--color-text-primary"),
-    fontSize: "0.875rem",
-  };
 
-  const readonlyFieldStyle: React.CSSProperties = {
-    ...inputStyle,
-    backgroundColor: t("--color-background-muted"),
-    cursor: "not-allowed",
-  };
 
   const checkboxGroupStyle: React.CSSProperties = {
     display: "flex",
@@ -303,22 +290,20 @@ export function TestPanel() {
           </div>
           {/* Resource Attributes (readonly) */}
           <div style={{ marginTop: "0.75rem", display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-            <div style={fieldStyle}>
-              <label style={{ ...labelStyle, fontSize: "0.75rem" }}>Owner</label>
-              <input
-                type="text"
+            <div style={{ flex: 1, minWidth: "120px" }}>
+              <TextInput
+                label="Owner"
                 value={currentResource?.ownerId || "-"}
-                readOnly
-                style={readonlyFieldStyle}
+                isDisabled
+                isLabelHidden
               />
             </div>
-            <div style={fieldStyle}>
-              <label style={{ ...labelStyle, fontSize: "0.75rem" }}>isPublic</label>
-              <input
-                type="text"
+            <div style={{ flex: 1, minWidth: "120px" }}>
+              <TextInput
+                label="isPublic"
                 value={currentResource?.attributes?.isPublic?.toString() || "false"}
-                readOnly
-                style={readonlyFieldStyle}
+                isDisabled
+                isLabelHidden
               />
             </div>
           </div>

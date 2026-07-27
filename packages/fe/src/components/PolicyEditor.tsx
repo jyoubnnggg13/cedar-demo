@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from "react";
-import { useTheme } from "@astryxdesign/core";
+import { useTheme, TextInput, TextArea } from "@astryxdesign/core";
 import { StepperProgress } from "./StepperProgress";
 import { SelectableCard } from "./SelectionCard";
 import { StepContainer } from "./StepContainer";
@@ -277,17 +277,8 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
     marginBottom: "1rem",
   };
 
-  const inputStyle: React.CSSProperties = {
-    width: "100%",
-    padding: "0.75rem",
-    fontSize: "0.875rem",
-    borderRadius: t("--radius-element"),
-    border: `1px solid ${errors[0] ? "#ef4444" : t("--color-border")}`,
-    backgroundColor: t("--color-background-surface"),
-    color: t("--color-text-primary"),
-    outline: "none",
-    boxSizing: "border-box" as const,
-  };
+  // Error status for inputs
+  const inputErrorStatus = errors[0] ? { type: 'error' as const, message: errors[0] } : undefined;
 
   const navigationStyle: React.CSSProperties = {
     display: "flex",
@@ -365,28 +356,16 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
         return (
           <div>
             <div style={{ marginBottom: "1rem" }}>
-              <label
-                htmlFor="policyName"
-                style={{
-                  display: "block",
-                  marginBottom: "0.5rem",
-                  fontSize: "0.875rem",
-                  fontWeight: 500,
-                  color: t("--color-text-primary"),
-                }}
-              >
-                Policy Name *
-              </label>
-              <input
-                id="policyName"
-                type="text"
+              <TextInput
+                label="Policy Name"
                 value={formState.name}
-                onChange={(e) => {
-                  setFormState((prev) => ({ ...prev, name: e.target.value }));
+                onChange={(value) => {
+                  setFormState((prev) => ({ ...prev, name: value }));
                   setErrors((prev) => ({ ...prev, 0: "" }));
                 }}
                 placeholder="정책 이름을 입력하세요"
-                style={inputStyle}
+                isRequired
+                status={inputErrorStatus}
               />
             </div>
             <StepContainer
@@ -473,59 +452,31 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
             onSelectNone={() => {}}
           >
             <div style={{ width: "100%" }}>
-              <label
-                htmlFor="conditionExpression"
-                style={{
-                  display: "block",
-                  marginBottom: "0.5rem",
-                  fontSize: "0.875rem",
-                  fontWeight: 500,
-                  color: t("--color-text-primary"),
-                }}
-              >
-                Condition Expression
-              </label>
-              <input
-                id="conditionExpression"
-                type="text"
+              <TextArea
+                label="Condition Expression"
                 value={formState.conditionExpression}
-                onChange={(e) =>
+                onChange={(value) =>
                   setFormState((prev) => ({
                     ...prev,
-                    conditionExpression: e.target.value,
+                    conditionExpression: value,
                   }))
                 }
                 placeholder='예: resource.ownerId == principal.id'
-                style={{
-                  ...inputStyle,
-                  fontFamily: "JetBrains Mono, monospace",
-                }}
+                rows={3}
+                description="조건 표현식을 입력하세요 (선택사항)"
               />
               <div style={{ marginTop: "1rem" }}>
-                <label
-                  htmlFor="conditionDescription"
-                  style={{
-                    display: "block",
-                    marginBottom: "0.5rem",
-                    fontSize: "0.875rem",
-                    fontWeight: 500,
-                    color: t("--color-text-primary"),
-                  }}
-                >
-                  Condition Description (선택)
-                </label>
-                <input
-                  id="conditionDescription"
-                  type="text"
+                <TextInput
+                  label="Condition Description"
                   value={formState.conditionDescription}
-                  onChange={(e) =>
+                  onChange={(value) =>
                     setFormState((prev) => ({
                       ...prev,
-                      conditionDescription: e.target.value,
+                      conditionDescription: value,
                     }))
                   }
                   placeholder="조건에 대한 설명을 입력하세요"
-                  style={inputStyle}
+                  description="조건에 대한 설명을 입력하세요 (선택사항)"
                 />
               </div>
             </div>

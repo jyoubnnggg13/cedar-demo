@@ -6,6 +6,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useTheme } from "@astryxdesign/core";
+import { TextInput } from "@astryxdesign/core";
 import type { Policy } from "../types/policy";
 
 interface PolicyListProps {
@@ -188,17 +189,7 @@ export const PolicyList: React.FC<PolicyListProps> = ({
     marginBottom: "0.75rem",
   };
 
-  const searchStyle: React.CSSProperties = {
-    width: "100%",
-    padding: "0.5rem 0.75rem",
-    fontSize: "0.875rem",
-    borderRadius: t("--radius-element"),
-    border: `1px solid ${t("--color-border")}`,
-    backgroundColor: t("--color-background-body"),
-    color: t("--color-text-primary"),
-    outline: "none",
-    boxSizing: "border-box" as const,
-  };
+
 
   const newButtonStyle: React.CSSProperties = {
     width: "100%",
@@ -275,12 +266,13 @@ export const PolicyList: React.FC<PolicyListProps> = ({
     <div style={containerStyle}>
       <div style={headerStyle}>
         <h3 style={titleStyle}>Policies</h3>
-        <input
-          type="text"
+        <TextInput
+          label="Search Policies"
           placeholder="정책 검색..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={searchStyle}
+          onChange={(value) => setSearchTerm(value)}
+          isLabelHidden
+          size="sm"
         />
         <button style={newButtonStyle} onClick={handleNewPolicy}>
           + 새 정책
