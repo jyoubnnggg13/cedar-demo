@@ -453,13 +453,7 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
                 key={option.value}
                 label={option.label}
                 isSelected={formState.actions.includes(option.value)}
-                onChange={(isSelected) => {
-                  if (isSelected) {
-                    handleActionToggle(option.value);
-                  } else {
-                    handleActionToggle(option.value);
-                  }
-                }}
+                onChange={() => handleActionToggle(option.value)}
               >
                 <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
                   <span style={{ fontSize: "0.875rem", fontWeight: 600, color: theme.token("--color-text-primary") }}>{option.label}</span>
