@@ -8,7 +8,7 @@
  */
 
 import { useState, useCallback } from "react";
-import { useTheme, Badge, Button } from "@astryxdesign/core";
+import { useTheme, Badge, Button, HStack, VStack, Layout, Heading, Text } from "@astryxdesign/core";
 import { PolicyList } from "../components/PolicyList";
 import { PolicyEditor } from "../components/PolicyEditor";
 import { TestPanel } from "../components/TestPanel";
@@ -137,91 +137,21 @@ export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
     setActiveView("test");
   }, []);
 
-  // Styles
-  const containerStyle: React.CSSProperties = {
-    display: "flex",
-    height: "100vh",
-    backgroundColor: t("--color-background-body"),
-  };
-
-  const sidebarStyle: React.CSSProperties = {
-    width: "300px",
-    flexShrink: 0,
-    height: "100%",
-  };
-
-  const mainContentStyle: React.CSSProperties = {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    overflow: "hidden",
-  };
-
-  const headerStyle: React.CSSProperties = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "1rem 1.5rem",
-    backgroundColor: t("--color-background-surface"),
-    borderBottom: `1px solid ${t("--color-border")}`,
-  };
-
-  const titleStyle: React.CSSProperties = {
-    fontSize: "1.125rem",
-    fontWeight: 600,
-    color: t("--color-text-primary"),
-    margin: 0,
-  };
-
-  const tabContainerStyle: React.CSSProperties = {
-    display: "flex",
-    gap: "0.25rem",
-    padding: "0.5rem 1.5rem",
-    backgroundColor: t("--color-background-surface"),
-    borderBottom: `1px solid ${t("--color-border")}`,
-  };
-
-  const tabStyle = (isActive: boolean): React.CSSProperties => ({
-    padding: "0.625rem 1.25rem",
-    fontSize: "0.875rem",
-    fontWeight: isActive ? 600 : 400,
-    color: isActive ? t("--color-accent") : t("--color-text-secondary"),
-    backgroundColor: "transparent",
-    border: "none",
-    borderBottom: isActive ? `2px solid ${t("--color-accent")}` : "2px solid transparent",
-    cursor: "pointer",
-    transition: `all ${theme.tokens["--duration-fast"] || "150ms"}`,
-  });
-
-  const contentStyle: React.CSSProperties = {
-    flex: 1,
-    padding: "1.5rem",
-    overflowY: "auto" as const,
-  };
-
-  const emptyStateStyle: React.CSSProperties = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100%",
-    color: t("--color-text-secondary"),
-    textAlign: "center",
-  };
-
-  const emptyStateTitleStyle: React.CSSProperties = {
-    fontSize: "1.25rem",
-    fontWeight: 600,
-    color: t("--color-text-primary"),
-    marginBottom: "0.5rem",
-  };
-
-  // emptyStateButtonStyle 제거 - Astryx Button 사용
+  // Styles - Astryx components use spacing props instead of inline styles
 
   return (
-    <div style={containerStyle}>
+    <Layout
+      type="flex"
+      height="100vh"
+      backgroundColor={t("--color-background-body")}
+    >
       {/* Policy List Sidebar */}
-      <div style={sidebarStyle}>
+      <HStack
+        width="300px"
+        height="100%"
+        flexShrink={0}
+        alignItems="stretch"
+      >
         <PolicyList
           selectedPolicyId={selectedPolicy?.id}
           onPolicySelect={handlePolicySelect}
@@ -229,42 +159,60 @@ export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
           onPolicyDelete={handlePolicyDelete}
           onNewPolicy={handleNewPolicy}
         />
-      </div>
+      </HStack>
 
       {/* Main Content Area */}
-      <div style={mainContentStyle}>
+      <VStack
+        flex={1}
+        alignItems="stretch"
+        overflow="hidden"
+      >
         {/* Header */}
-        <div style={headerStyle}>
-          <h1 style={titleStyle}>
+        <HStack
+          padding="1rem 1.5rem"
+          backgroundColor={t("--color-background-surface")}
+          borderBottom={`1px solid ${t("--color-border")}`}
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Heading level={1} size="md">
             {selectedPolicy
               ? selectedPolicy.name
               : isCreatingNew
               ? "새 정책 만들기"
               : "Playground"}
-          </h1>
+          </Heading>
           {selectedPolicy && !isCreatingNew && (
             <Badge variant="info" label="선택됨" />
           )}
-        </div>
+        </HStack>
 
         {/* Tab Navigation */}
-        <div style={tabContainerStyle}>
-          <button
-            style={tabStyle(activeView === "editor")}
+        <HStack
+          padding="0.5rem 1.5rem"
+          backgroundColor={t("--color-background-surface")}
+          borderBottom={`1px solid ${t("--color-border")}`}
+          gap="0.25rem"
+        >
+          <Button
+            variant={activeView === "editor" ? "primary" : "secondary"}
             onClick={() => setActiveView("editor")}
-          >
-            Policy Editor
-          </button>
-          <button
-            style={tabStyle(activeView === "test")}
+            label="Policy Editor"
+          />
+          <Button
+            variant={activeView === "test" ? "primary" : "secondary"}
             onClick={() => setActiveView("test")}
-          >
-            Test Panel
-          </button>
-        </div>
+            label="Test Panel"
+          />
+        </HStack>
 
         {/* Content */}
-        <div style={contentStyle}>
+        <VStack
+          flex={1}
+          padding="1.5rem"
+          overflow="auto"
+          alignItems="stretch"
+        >
           {activeView === "editor" ? (
             selectedPolicy || isCreatingNew ? (
               <PolicyEditor
@@ -277,23 +225,27 @@ export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
                 onCancel={handleCancel}
               />
             ) : (
-              <div style={emptyStateStyle}>
-                <p style={emptyStateTitleStyle}>편집할 정책을 선택하세요</p>
-                <p>사이드바에서 정책을 선택하거나 새 정책을 만드세요.</p>
+              <VStack
+                alignItems="center"
+                justifyContent="center"
+                height="100%"
+                gap="1rem"
+              >
+                <Text size="lg" weight="semibold">편집할 정책을 선택하세요</Text>
+                <Text size="sm" color="secondary">사이드바에서 정책을 선택하거나 새 정책을 만드세요.</Text>
                 <Button
                   label="+ 새 정책 만들기"
                   variant="primary"
                   onClick={handleNewPolicy}
-                  style={{ marginTop: "1rem" }}
                 />
-              </div>
+              </VStack>
             )
           ) : (
             <TestPanel />
           )}
-        </div>
-      </div>
-    </div>
+        </VStack>
+      </VStack>
+    </Layout>
   );
 };
 

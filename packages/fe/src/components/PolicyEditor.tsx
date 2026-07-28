@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from "react";
-import { useTheme, TextInput, TextArea, CodeBlock, Button } from "@astryxdesign/core";
+import { useTheme, TextInput, TextArea, CodeBlock, Button, VStack, HStack, Heading, Text, Section } from "@astryxdesign/core";
 import { StepperProgress } from "./StepperProgress";
 import { SelectableCard } from "./SelectionCard";
 import { StepContainer } from "./StepContainer";
@@ -253,86 +253,26 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
     }
   };
 
-  // 스타일 정의
-  const containerStyle: React.CSSProperties = {
-    padding: "1.5rem",
-    borderRadius: t("--radius-container"),
-    backgroundColor: t("--color-background-surface"),
-    border: `1px solid ${t("--color-border")}`,
-    maxWidth: "800px",
-    margin: "0 auto",
-  };
-
-  const headerStyle: React.CSSProperties = {
-    marginBottom: "1.5rem",
-    paddingBottom: "1rem",
-    borderBottom: `1px solid ${t("--color-border")}`,
-  };
-
-  const titleStyle: React.CSSProperties = {
-    fontSize: "1.25rem",
-    fontWeight: 600,
-    color: t("--color-text-primary"),
-    margin: 0,
-    marginBottom: "1rem",
-  };
-
   // Error status for inputs
   const inputErrorStatus = errors[0] ? { type: 'error' as const, message: errors[0] } : undefined;
-
-  const navigationStyle: React.CSSProperties = {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: "1.5rem",
-    gap: "1rem",
-  };
-
-  // button styles 제거 - Astryx Button 사용
-
-  const previewContainerStyle: React.CSSProperties = {
-    marginTop: "1.5rem",
-    padding: "1rem",
-    borderRadius: t("--radius-element"),
-    backgroundColor: t("--color-background-muted"),
-    border: `1px solid ${t("--color-border")}`,
-  };
-
-  const previewTitleStyle: React.CSSProperties = {
-    fontSize: "0.875rem",
-    fontWeight: 600,
-    color: t("--color-text-primary"),
-    marginBottom: "0.5rem",
-  };
-
-  // codeBlockStyle 제거 - CodeBlock 컴포넌트가 대신 사용
-
-  const footerStyle: React.CSSProperties = {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: "1.5rem",
-    paddingTop: "1rem",
-    borderTop: `1px solid ${t("--color-border")}`,
-  };
 
   // 스텝 콘텐츠 렌더링
   const renderStepContent = () => {
     switch (currentStep) {
       case 0:
         return (
-          <div>
-            <div style={{ marginBottom: "1rem" }}>
-              <TextInput
-                label="Policy Name"
-                value={formState.name}
-                onChange={(value) => {
-                  setFormState((prev) => ({ ...prev, name: value }));
-                  setErrors((prev) => ({ ...prev, 0: "" }));
-                }}
-                placeholder="정책 이름을 입력하세요"
-                isRequired
-                status={inputErrorStatus}
-              />
-            </div>
+          <VStack alignItems="stretch" gap="1rem">
+            <TextInput
+              label="Policy Name"
+              value={formState.name}
+              onChange={(value) => {
+                setFormState((prev) => ({ ...prev, name: value }));
+                setErrors((prev) => ({ ...prev, 0: "" }));
+              }}
+              placeholder="정책 이름을 입력하세요"
+              isRequired
+              status={inputErrorStatus}
+            />
             <StepContainer
               title="Principal (Role)"
               subtitle="역할을 선택하세요"
@@ -347,14 +287,14 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
                   isSelected={formState.principalRole === option.value}
                   onChange={(isSelected) => isSelected && handlePrincipalSelect(option.value)}
                 >
-                  <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
-                    <span style={{ fontSize: "0.875rem", fontWeight: 600, color: theme.token("--color-text-primary") }}>{option.label}</span>
-                    {option.description && <span style={{ fontSize: "0.75rem", color: theme.token("--color-text-secondary") }}>{option.description}</span>}
-                  </div>
+                  <VStack alignItems="center" gap="0.5rem">
+                    <Text size="sm" weight="semibold">{option.label}</Text>
+                    {option.description && <Text size="xs" color="secondary">{option.description}</Text>}
+                  </VStack>
                 </SelectableCard>
               ))}
             </StepContainer>
-          </div>
+          </VStack>
         );
 
       case 1:
@@ -373,10 +313,10 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
                 isSelected={formState.resourceType === option.value}
                 onChange={(isSelected) => isSelected && handleResourceSelect(option.value)}
               >
-                <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
-                  <span style={{ fontSize: "0.875rem", fontWeight: 600, color: theme.token("--color-text-primary") }}>{option.label}</span>
-                  {option.description && <span style={{ fontSize: "0.75rem", color: theme.token("--color-text-secondary") }}>{option.description}</span>}
-                </div>
+                <VStack alignItems="center" gap="0.5rem">
+                  <Text size="sm" weight="semibold">{option.label}</Text>
+                  {option.description && <Text size="xs" color="secondary">{option.description}</Text>}
+                </VStack>
               </SelectableCard>
             ))}
           </StepContainer>
@@ -399,10 +339,10 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
                 isSelected={formState.actions.includes(option.value)}
                 onChange={() => handleActionToggle(option.value)}
               >
-                <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
-                  <span style={{ fontSize: "0.875rem", fontWeight: 600, color: theme.token("--color-text-primary") }}>{option.label}</span>
-                  {option.description && <span style={{ fontSize: "0.75rem", color: theme.token("--color-text-secondary") }}>{option.description}</span>}
-                </div>
+                <VStack alignItems="center" gap="0.5rem">
+                  <Text size="sm" weight="semibold">{option.label}</Text>
+                  {option.description && <Text size="xs" color="secondary">{option.description}</Text>}
+                </VStack>
               </SelectableCard>
             ))}
           </StepContainer>
@@ -416,7 +356,7 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
             onSelectAll={() => {}}
             onSelectNone={() => {}}
           >
-            <div style={{ width: "100%" }}>
+            <VStack alignItems="stretch" gap="1rem" width="100%">
               <TextArea
                 label="Condition Expression"
                 value={formState.conditionExpression}
@@ -430,21 +370,19 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
                 rows={3}
                 description="조건 표현식을 입력하세요 (선택사항)"
               />
-              <div style={{ marginTop: "1rem" }}>
-                <TextInput
-                  label="Condition Description"
-                  value={formState.conditionDescription}
-                  onChange={(value) =>
-                    setFormState((prev) => ({
-                      ...prev,
-                      conditionDescription: value,
-                    }))
-                  }
-                  placeholder="조건에 대한 설명을 입력하세요"
-                  description="조건에 대한 설명을 입력하세요 (선택사항)"
-                />
-              </div>
-            </div>
+              <TextInput
+                label="Condition Description"
+                value={formState.conditionDescription}
+                onChange={(value) =>
+                  setFormState((prev) => ({
+                    ...prev,
+                    conditionDescription: value,
+                  }))
+                }
+                placeholder="조건에 대한 설명을 입력하세요"
+                description="조건에 대한 설명을 입력하세요 (선택사항)"
+              />
+            </VStack>
           </StepContainer>
         );
 
@@ -454,66 +392,88 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
   };
 
   return (
-    <div style={containerStyle}>
-      <header style={headerStyle}>
-        <h2 style={titleStyle}>Policy Editor</h2>
-      </header>
+    <Section
+      padding="1.5rem"
+      borderRadius={t("--radius-container")}
+      backgroundColor={t("--color-background-surface")}
+      border={`1px solid ${t("--color-border")}`}
+      maxWidth="800px"
+      margin="0 auto"
+    >
+      <VStack alignItems="stretch" gap="1.5rem">
+        {/* Header */}
+        <VStack alignItems="stretch" paddingBottom="1rem" borderBottom={`1px solid ${t("--color-border")}`}>
+          <Heading level={2} size="lg">Policy Editor</Heading>
+        </VStack>
 
-      <StepperProgress
-        steps={steps}
-        currentStep={currentStep}
-        completedSteps={completedSteps}
-        onStepClick={handleStepClick}
-      />
-
-      {renderStepContent()}
-
-      <div style={navigationStyle}>
-        <Button
-          label="← Previous"
-          variant="secondary"
-          onClick={handlePrevious}
-          isDisabled={currentStep === 0}
+        {/* Stepper */}
+        <StepperProgress
+          steps={steps}
+          currentStep={currentStep}
+          completedSteps={completedSteps}
+          onStepClick={handleStepClick}
         />
-        {currentStep < steps.length - 1 ? (
+
+        {/* Step Content */}
+        {renderStepContent()}
+
+        {/* Navigation */}
+        <HStack justifyContent="space-between" gap="1rem">
           <Button
-            label="Next →"
-            variant="primary"
-            onClick={handleNext}
+            label="← Previous"
+            variant="secondary"
+            onClick={handlePrevious}
+            isDisabled={currentStep === 0}
           />
-        ) : (
-          <div />
-        )}
-      </div>
+          {currentStep < steps.length - 1 ? (
+            <Button
+              label="Next →"
+              variant="primary"
+              onClick={handleNext}
+            />
+          ) : (
+            <div />
+          )}
+        </HStack>
 
-      <div style={previewContainerStyle}>
-        <h3 style={previewTitleStyle}>Cedar JSON Preview</h3>
-        <CodeBlock
-          code={cedarJson}
-          language="json"
-          container="section"
-          size="sm"
-          hasCopyButton
-          isWrapped
-          maxHeight={200}
-        />
-      </div>
+        {/* Preview */}
+        <Section
+          padding="1rem"
+          backgroundColor={t("--color-background-muted")}
+          borderRadius={t("--radius-element")}
+          border={`1px solid ${t("--color-border")}`}
+        >
+          <VStack alignItems="stretch" gap="0.5rem">
+            <Heading level={3} size="sm">Cedar JSON Preview</Heading>
+            <CodeBlock
+              code={cedarJson}
+              language="json"
+              container="section"
+              size="sm"
+              hasCopyButton
+              isWrapped
+              maxHeight={200}
+            />
+          </VStack>
+        </Section>
 
-      <footer style={footerStyle}>
-        <Button
-          label="Cancel"
-          variant="secondary"
-          onClick={handleCancel}
-        />
-        <Button
-          label={isSaving ? "Saving..." : "Save Policy"}
-          variant="primary"
-          onClick={handleSave}
-          isDisabled={!isAllValid || isSaving}
-          isLoading={isSaving}
-        />
-      </footer>
-    </div>
+        {/* Footer */}
+        <HStack justifyContent="space-between" paddingTop="1rem" borderTop={`1px solid ${t("--color-border")}`}>
+          <Button
+            label="Cancel"
+            variant="secondary"
+            onClick={handleCancel}
+          />
+          <Button
+            label={isSaving ? "Saving..." : "Save Policy"}
+            variant="primary"
+            onClick={handleSave}
+            isDisabled={!isAllValid || isSaving}
+            isLoading={isSaving}
+          />
+        </HStack>
+      </VStack>
+    </Section>
   );
 };
 

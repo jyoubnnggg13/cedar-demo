@@ -6,7 +6,7 @@
  */
 
 import { useState, useCallback, useEffect } from "react";
-import { useTheme, TextInput, Selector, Badge, Button } from "@astryxdesign/core";
+import { useTheme, TextInput, Selector, Badge, Button, VStack, HStack, Heading, Text, CheckboxInput, Banner } from "@astryxdesign/core";
 import { useEvaluate } from "../hooks/useEvaluate";
 import { ResultDisplay } from "./ResultDisplay";
 import type { Principal, Resource, EvaluateRequest, EvaluateResponse } from "../types/evaluation";
@@ -110,203 +110,118 @@ export function TestPanel() {
     setResult(response);
   }, [principalRole, principalId, resourceType, resourceId, currentResource, selectedActions, evaluate]);
 
-  // Styles
-  const panelStyle: React.CSSProperties = {
-    padding: "1.5rem",
-    borderRadius: t("--radius-container"),
-    backgroundColor: t("--color-background-surface"),
-    border: `1px solid ${t("--color-border")}`,
-  };
-
-  const headerStyle: React.CSSProperties = {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "1.5rem",
-    paddingBottom: "1rem",
-    borderBottom: `1px solid ${t("--color-border")}`,
-  };
-
-  const titleStyle: React.CSSProperties = {
-    fontSize: t("--text-heading-1-size"),
-    fontWeight: Number(t("--text-heading-1-weight")),
-    color: t("--color-text-primary"),
-    margin: 0,
-  };
-
-
-
-  const sectionStyle: React.CSSProperties = {
-    marginBottom: "1.5rem",
-  };
-
-  const sectionTitleStyle: React.CSSProperties = {
-    fontSize: "0.875rem",
-    fontWeight: 600,
-    color: t("--color-text-primary"),
-    marginBottom: "0.75rem",
-  };
-
-  const fieldGroupStyle: React.CSSProperties = {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-    gap: "1rem",
-  };
-
-  const fieldStyle: React.CSSProperties = {
-    display: "flex",
-    flexDirection: "column",
-    gap: "0.5rem",
-  };
-
-  const labelStyle: React.CSSProperties = {
-    fontSize: "0.75rem",
-    fontWeight: 500,
-    color: t("--color-text-secondary"),
-    textTransform: "uppercase",
-    letterSpacing: "0.05em",
-  };
-
-
-
-  const checkboxGroupStyle: React.CSSProperties = {
-    display: "flex",
-    gap: "1rem",
-    flexWrap: "wrap",
-  };
-
-  const checkboxLabelStyle: React.CSSProperties = {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.5rem",
-    cursor: "pointer",
-    fontSize: "0.875rem",
-    color: t("--color-text-primary"),
-  };
-
-  // buttonStyle 제거 - Astryx Button 사용
-
-  const errorStyle: React.CSSProperties = {
-    marginTop: "1rem",
-    padding: "0.75rem",
-    borderRadius: t("--radius-element"),
-    backgroundColor: "#fef2f2",
-    border: "1px solid #fecaca",
-    color: "#dc2626",
-    fontSize: "0.875rem",
-  };
+  // Styles - Astryx components use spacing props instead of inline styles
 
   return (
-    <div style={panelStyle}>
-      <header style={headerStyle}>
-        <h2 style={titleStyle}>Authorization Test</h2>
+    <VStack
+      padding="1.5rem"
+      borderRadius={t("--radius-container")}
+      backgroundColor={t("--color-background-surface")}
+      border={`1px solid ${t("--color-border")}`}
+      alignItems="stretch"
+      gap="1.5rem"
+    >
+      {/* Header */}
+      <HStack
+        justifyContent="space-between"
+        alignItems="center"
+        paddingBottom="1rem"
+        borderBottom={`1px solid ${t("--color-border")}`}
+      >
+        <Heading level={2} size="lg">Authorization Test</Heading>
         <Badge variant="blue" label="Playground" />
-      </header>
+      </HStack>
 
       {/* Request Configuration */}
-      <div style={sectionStyle}>
-        <h3 style={sectionTitleStyle}>Request Configuration</h3>
+      <VStack alignItems="stretch" gap="1.5rem">
+        <Heading level={3} size="sm">Request Configuration</Heading>
 
         {/* Principal */}
-        <div style={{ marginBottom: "1rem" }}>
-          <label style={labelStyle}>Principal</label>
-          <div style={fieldGroupStyle}>
-            <div style={fieldStyle}>
-              <Selector
-                label="Role"
-                value={principalRole}
-                onChange={(value) => setPrincipalRole(value as Principal["role"])}
-                options={[
-                  { value: "admin", label: "Admin" },
-                  { value: "editor", label: "Editor" },
-                  { value: "viewer", label: "Viewer" },
-                ]}
-                size="sm"
-                isLabelHidden
-              />
-            </div>
-            <div style={fieldStyle}>
-              <Selector
-                label="User ID"
-                value={principalId}
-                onChange={(value) => setPrincipalId(value)}
-                options={SAMPLE_USERS[principalRole]?.map((userId) => ({ value: userId, label: userId })) || []}
-                size="sm"
-                isLabelHidden
-              />
-            </div>
-          </div>
-        </div>
+        <VStack alignItems="stretch" gap="0.5rem">
+          <Text size="xs" weight="medium" textTransform="uppercase" letterSpacing="wider" color="secondary">Principal</Text>
+          <HStack gap="1rem" flexWrap="wrap">
+            <Selector
+              label="Role"
+              value={principalRole}
+              onChange={(value) => setPrincipalRole(value as Principal["role"])}
+              options={[
+                { value: "admin", label: "Admin" },
+                { value: "editor", label: "Editor" },
+                { value: "viewer", label: "Viewer" },
+              ]}
+              size="sm"
+              isLabelHidden
+            />
+            <Selector
+              label="User ID"
+              value={principalId}
+              onChange={(value) => setPrincipalId(value)}
+              options={SAMPLE_USERS[principalRole]?.map((userId) => ({ value: userId, label: userId })) || []}
+              size="sm"
+              isLabelHidden
+            />
+          </HStack>
+        </VStack>
 
         {/* Resource */}
-        <div style={{ marginBottom: "1rem" }}>
-          <label style={labelStyle}>Resource</label>
-          <div style={fieldGroupStyle}>
-            <div style={fieldStyle}>
-              <Selector
-                label="Type"
-                value={resourceType}
-                onChange={(value) => setResourceType(value as Resource["type"])}
-                options={[
-                  { value: "document", label: "Document" },
-                  { value: "issue", label: "Issue" },
-                ]}
-                size="sm"
-                isLabelHidden
-              />
-            </div>
-            <div style={fieldStyle}>
-              <Selector
-                label="Resource ID"
-                value={resourceId}
-                onChange={(value) => setResourceId(value)}
-                options={SAMPLE_RESOURCES[resourceType]?.map((resource) => ({ value: resource.id, label: resource.id })) || []}
-                size="sm"
-                isLabelHidden
-              />
-            </div>
-          </div>
+        <VStack alignItems="stretch" gap="0.5rem">
+          <Text size="xs" weight="medium" textTransform="uppercase" letterSpacing="wider" color="secondary">Resource</Text>
+          <HStack gap="1rem" flexWrap="wrap">
+            <Selector
+              label="Type"
+              value={resourceType}
+              onChange={(value) => setResourceType(value as Resource["type"])}
+              options={[
+                { value: "document", label: "Document" },
+                { value: "issue", label: "Issue" },
+              ]}
+              size="sm"
+              isLabelHidden
+            />
+            <Selector
+              label="Resource ID"
+              value={resourceId}
+              onChange={(value) => setResourceId(value)}
+              options={SAMPLE_RESOURCES[resourceType]?.map((resource) => ({ value: resource.id, label: resource.id })) || []}
+              size="sm"
+              isLabelHidden
+            />
+          </HStack>
           {/* Resource Attributes (readonly) */}
-          <div style={{ marginTop: "0.75rem", display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-            <div style={{ flex: 1, minWidth: "120px" }}>
-              <TextInput
-                label="Owner"
-                value={currentResource?.ownerId || "-"}
-                isDisabled
-                isLabelHidden
-              />
-            </div>
-            <div style={{ flex: 1, minWidth: "120px" }}>
-              <TextInput
-                label="isPublic"
-                value={currentResource?.attributes?.isPublic?.toString() || "false"}
-                isDisabled
-                isLabelHidden
-              />
-            </div>
-          </div>
-        </div>
+          <HStack gap="1rem" flexWrap="wrap" marginTop="0.75rem">
+            <TextInput
+              label="Owner"
+              value={currentResource?.ownerId || "-"}
+              isDisabled
+              isLabelHidden
+            />
+            <TextInput
+              label="isPublic"
+              value={currentResource?.attributes?.isPublic?.toString() || "false"}
+              isDisabled
+              isLabelHidden
+            />
+          </HStack>
+        </VStack>
 
         {/* Action */}
-        <div>
-          <label style={labelStyle}>Action</label>
-          <div style={checkboxGroupStyle}>
+        <VStack alignItems="stretch" gap="0.5rem">
+          <Text size="xs" weight="medium" textTransform="uppercase" letterSpacing="wider" color="secondary">Action</Text>
+          <HStack gap="1rem" flexWrap="wrap">
             {ACTIONS.map((action) => (
-              <label key={action.value} style={checkboxLabelStyle}>
-                <input
-                  type="checkbox"
-                  checked={selectedActions.has(action.value)}
-                  onChange={() => handleActionToggle(action.value)}
-                />
-                <span>{action.label}</span>
-              </label>
+              <CheckboxInput
+                key={action.value}
+                label={action.label}
+                isChecked={selectedActions.has(action.value)}
+                onChange={() => handleActionToggle(action.value)}
+              />
             ))}
-          </div>
-        </div>
-      </div>
+          </HStack>
+        </VStack>
+      </VStack>
 
       {/* Evaluate Button */}
-      <div>
+      <VStack alignItems="stretch" gap="0.5rem">
         <Button
           label={loading ? "Evaluating..." : "Evaluate Request"}
           variant="primary"
@@ -316,20 +231,20 @@ export function TestPanel() {
           style={{ width: "100%" }}
         />
         {selectedActions.size === 0 && (
-          <p style={{ ...errorStyle, backgroundColor: "#fef3c7", borderColor: "#fcd34d", color: "#92400e", marginTop: "0.5rem" }}>
+          <Banner variant="warning">
             최소 1개의 액션을 선택해주세요.
-          </p>
+          </Banner>
         )}
-      </div>
+      </VStack>
 
       {/* Error Display */}
-      {error && <div style={errorStyle}>{error}</div>}
+      {error && <Banner variant="error">{error}</Banner>}
 
       {/* Result Display */}
-      <div>
-        <h3 style={{ ...sectionTitleStyle, marginTop: "1.5rem" }}>Result</h3>
+      <VStack alignItems="stretch" gap="1rem">
+        <Heading level={3} size="sm">Result</Heading>
         <ResultDisplay result={result} />
-      </div>
-    </div>
+      </VStack>
+    </VStack>
   );
 }

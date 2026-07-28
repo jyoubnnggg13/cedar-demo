@@ -4,7 +4,7 @@
  * Displays the authorization evaluation result with visual badges.
  */
 
-import { useTheme, Badge } from "@astryxdesign/core";
+import { useTheme, Badge, VStack, Text, Section } from "@astryxdesign/core";
 import type { EvaluateResponse } from "../types/evaluation";
 
 interface ResultDisplayProps {
@@ -21,32 +21,10 @@ export function ResultDisplay({ result }: ResultDisplayProps) {
 
   const isAllow = result.decision === "ALLOW";
 
-  const containerStyle: React.CSSProperties = {
-    marginTop: "1rem",
-  };
-
-  const detailsStyle: React.CSSProperties = {
-    marginTop: "1rem",
-    padding: "1rem",
-    backgroundColor: t("--color-background-muted"),
-    borderRadius: t("--radius-element"),
-    border: `1px solid ${t("--color-border")}`,
-  };
-
-  const labelStyle: React.CSSProperties = {
-    fontSize: "0.875rem",
-    color: t("--color-text-secondary"),
-    marginBottom: "0.25rem",
-  };
-
-  const valueStyle: React.CSSProperties = {
-    fontSize: "1rem",
-    color: t("--color-text-primary"),
-    fontWeight: 500,
-  };
+  // Styles - Astryx components use spacing props instead of inline styles
 
   return (
-    <div style={containerStyle}>
+    <VStack marginTop="1rem" alignItems="stretch" gap="1rem">
       <Badge
         variant={isAllow ? "success" : "error"}
         label={result.decision}
@@ -54,25 +32,37 @@ export function ResultDisplay({ result }: ResultDisplayProps) {
       />
 
       {isAllow ? (
-        <div style={detailsStyle}>
-          <p style={{ color: t("--color-text-secondary"), margin: 0 }}>
+        <Section
+          padding="1rem"
+          backgroundColor={t("--color-background-muted")}
+          borderRadius={t("--radius-element")}
+          border={`1px solid ${t("--color-border")}`}
+        >
+          <Text size="sm" color="secondary">
             모든 Forbid 정책이 미매칭 → 요청이 허용됩니다
-          </p>
-        </div>
+          </Text>
+        </Section>
       ) : (
-        <div style={detailsStyle}>
-          <div style={{ marginBottom: "0.75rem" }}>
-            <p style={labelStyle}>매칭된 정책</p>
-            <p style={valueStyle}>{result.matchedPolicy || "-"}</p>
-          </div>
-          {result.reason && (
-            <div>
-              <p style={labelStyle}>이유</p>
-              <p style={valueStyle}>{result.reason}</p>
-            </div>
-          )}
-        </div>
+        <Section
+          padding="1rem"
+          backgroundColor={t("--color-background-muted")}
+          borderRadius={t("--radius-element")}
+          border={`1px solid ${t("--color-border")}`}
+        >
+          <VStack alignItems="stretch" gap="0.75rem">
+            <VStack alignItems="stretch">
+              <Text size="sm" color="secondary">매칭된 정책</Text>
+              <Text size="base" weight="medium">{result.matchedPolicy || "-"}</Text>
+            </VStack>
+            {result.reason && (
+              <VStack alignItems="stretch">
+                <Text size="sm" color="secondary">이유</Text>
+                <Text size="base" weight="medium">{result.reason}</Text>
+              </VStack>
+            )}
+          </VStack>
+        </Section>
       )}
-    </div>
+    </VStack>
   );
 }
