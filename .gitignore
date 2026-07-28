@@ -1,4 +1,5 @@
 .pi
+.pi-subagents
 
 # Dependencies
 node_modules/
