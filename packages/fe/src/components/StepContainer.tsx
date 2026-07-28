@@ -1,5 +1,5 @@
 import React from "react";
-import { useTheme, Button, VStack, HStack, Heading, Text, Section, Banner } from "@astryxdesign/core";
+import { useTheme, Button, VStack, HStack, Heading, Text } from "@astryxdesign/core";
 
 /**
  * StepContainer Props
@@ -29,47 +29,59 @@ export const StepContainer: React.FC<StepContainerProps> = ({
 }) => {
   const theme = useTheme();
   const t = (name: string) => theme.token(name);
-
-  // Styles - Astryx components use spacing props instead of inline styles
+  const borderColor = error ? "#ef4444" : t("--color-border");
 
   return (
-    <Section
-      padding="1.5rem"
-      borderRadius={t("--radius-element")}
-      backgroundColor={t("--color-background-surface")}
-      border={`1px solid ${error ? "#ef4444" : t("--color-border")}`}
+    <VStack
+      gap="md"
+      padding="lg"
+      borderRadius="element"
+      backgroundColor="--color-background-surface"
+      border={`1px solid ${borderColor}`}
+      alignItems="stretch"
     >
-      <VStack alignItems="stretch" gap="1rem">
-        <HStack alignItems="center" justifyContent="space-between" flexWrap gap="0.5rem">
-          <VStack alignItems="stretch" gap="0.25rem">
-            <Heading level={3} size="md">{title}</Heading>
-            {subtitle && <Text size="xs" color="secondary">{subtitle}</Text>}
-          </VStack>
-          {showBulkActions && (
-            <HStack gap="0.5rem">
-              <Button
-                label="Select All"
-                variant="primary"
-                size="sm"
-                onClick={onSelectAll}
-              />
-              <Button
-                label="None"
-                variant="secondary"
-                size="sm"
-                onClick={onSelectNone}
-              />
-            </HStack>
+      {/* Header */}
+      <HStack gap="md" justifyContent="space-between" wrap alignItems="flex-start">
+        <VStack gap="xs" alignItems="flex-start">
+          <Heading level={3} size="base" fontWeight="semibold" color="--color-text-primary">
+            {title}
+          </Heading>
+          {subtitle && (
+            <Text size="xs" color="--color-text-secondary">
+              {subtitle}
+            </Text>
           )}
-        </HStack>
-        <HStack gap="1rem" flexWrap>
-          {children}
-        </HStack>
-        {error && (
-          <Banner variant="error">{error}</Banner>
+        </VStack>
+        {showBulkActions && (
+          <HStack gap="sm">
+            <Button
+              label="Select All"
+              variant="primary"
+              size="sm"
+              onClick={onSelectAll}
+            />
+            <Button
+              label="None"
+              variant="secondary"
+              size="sm"
+              onClick={onSelectNone}
+            />
+          </HStack>
         )}
-      </VStack>
-    </Section>
+      </HStack>
+
+      {/* Content */}
+      <HStack gap="md" wrap justifyContent="flex-start">
+        {children}
+      </HStack>
+
+      {/* Error */}
+      {error && (
+        <Text size="sm" color="--color-status-error-fg" backgroundColor="--color-status-error-bg" padding="sm" borderRadius="element">
+          {error}
+        </Text>
+      )}
+    </VStack>
   );
 };
 

@@ -4,7 +4,7 @@
  * Displays the authorization evaluation result with visual badges.
  */
 
-import { useTheme, Badge, VStack, Text, Section } from "@astryxdesign/core";
+import { useTheme, Badge, Text, VStack } from "@astryxdesign/core";
 import type { EvaluateResponse } from "../types/evaluation";
 
 interface ResultDisplayProps {
@@ -21,10 +21,8 @@ export function ResultDisplay({ result }: ResultDisplayProps) {
 
   const isAllow = result.decision === "ALLOW";
 
-  // Styles - Astryx components use spacing props instead of inline styles
-
   return (
-    <VStack marginTop="1rem" alignItems="stretch" gap="1rem">
+    <VStack gap="sm" paddingTop="sm">
       <Badge
         variant={isAllow ? "success" : "error"}
         label={result.decision}
@@ -32,36 +30,40 @@ export function ResultDisplay({ result }: ResultDisplayProps) {
       />
 
       {isAllow ? (
-        <Section
-          padding="1rem"
-          backgroundColor={t("--color-background-muted")}
-          borderRadius={t("--radius-element")}
-          border={`1px solid ${t("--color-border")}`}
+        <VStack
+          gap="sm"
+          padding="md"
+          backgroundColor="--color-background-muted"
+          borderRadius="element"
+          border="1px solid --color-border"
         >
-          <Text size="sm" color="secondary">
+          <Text size="sm" color="--color-text-secondary">
             모든 Forbid 정책이 미매칭 → 요청이 허용됩니다
           </Text>
-        </Section>
+        </VStack>
       ) : (
-        <Section
-          padding="1rem"
-          backgroundColor={t("--color-background-muted")}
-          borderRadius={t("--radius-element")}
-          border={`1px solid ${t("--color-border")}`}
+        <VStack
+          gap="md"
+          padding="md"
+          backgroundColor="--color-background-muted"
+          borderRadius="element"
+          border="1px solid --color-border"
         >
-          <VStack alignItems="stretch" gap="0.75rem">
-            <VStack alignItems="stretch">
-              <Text size="sm" color="secondary">매칭된 정책</Text>
-              <Text size="base" weight="medium">{result.matchedPolicy || "-"}</Text>
-            </VStack>
-            {result.reason && (
-              <VStack alignItems="stretch">
-                <Text size="sm" color="secondary">이유</Text>
-                <Text size="base" weight="medium">{result.reason}</Text>
-              </VStack>
-            )}
+          <VStack gap="xs">
+            <Text size="sm" color="--color-text-secondary">매칭된 정책</Text>
+            <Text size="base" fontWeight="medium" color="--color-text-primary">
+              {result.matchedPolicy || "-"}
+            </Text>
           </VStack>
-        </Section>
+          {result.reason && (
+            <VStack gap="xs">
+              <Text size="sm" color="--color-text-secondary">이유</Text>
+              <Text size="base" fontWeight="medium" color="--color-text-primary">
+                {result.reason}
+              </Text>
+            </VStack>
+          )}
+        </VStack>
       )}
     </VStack>
   );

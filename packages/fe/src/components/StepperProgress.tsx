@@ -1,5 +1,5 @@
 import React from "react";
-import { useTheme, VStack, HStack, Text, Badge } from "@astryxdesign/core";
+import { useTheme, HStack, Text, Badge } from "@astryxdesign/core";
 import type { Step } from "../types/policy";
 
 /**
@@ -27,63 +27,73 @@ export const StepperProgress: React.FC<StepperProgressProps> = ({
   const theme = useTheme();
   const t = (name: string) => theme.token(name);
 
-  // Styles - Astryx components use spacing props instead of inline styles
-
   return (
-    <VStack
-      alignItems="center"
-      padding="1rem"
-      backgroundColor={t("--color-background-muted")}
-      borderRadius={t("--radius-element")}
-      marginBottom="1.5rem"
-      gap="1rem"
+    <HStack
+      gap="sm"
+      padding="md"
+      justifyContent="center"
+      backgroundColor="--color-background-muted"
+      borderRadius="element"
+      marginBottom="lg"
     >
-      <HStack alignItems="center" justifyContent="space-between" flex={1} gap="0">
-        {steps.map((step, index) => {
-          const isCompleted = completedSteps.includes(index);
-          const isPast = index < currentStep || isCompleted;
-          const isCurrent = currentStep === index;
-          const isClickable = !disabled && (index <= currentStep || completedSteps.includes(index));
+      {steps.map((step, index) => {
+        const isCompleted = completedSteps.includes(index);
+        const isCurrent = currentStep === index;
+        const isPast = index < currentStep || isCompleted;
+        const isClickable = !disabled && isPast;
 
-          return (
-            <React.Fragment key={step.id}>
-              <VStack
-                alignItems="center"
-                gap="0.5rem"
-                cursor={disabled ? "not-allowed" : isPast ? "pointer" : "default"}
-                opacity={disabled ? 0.5 : 1}
-                onClick={() => isClickable && onStepClick(index)}
-                role="button"
-                tabIndex={disabled ? -1 : 0}
-                aria-label={`Step ${step.id}: ${step.title}`}
+        return (
+          <React.Fragment key={step.id}>
+            {/* Step */}
+            <VStack
+              gap="sm"
+              alignItems="center"
+              onClick={() => isClickable && onStepClick(index)}
+              role="button"
+              tabIndex={disabled ? -1 : 0}
+              aria-label={`Step ${step.id}: ${step.title}`}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  isClickable && onStepClick(index);
+                }
+              }}
+              style={{
+                cursor: isClickable ? "pointer" : disabled ? "not-allowed" : "default",
+                opacity: disabled ? 0.5 : 1,
+              }}
+            >
+              <Badge
+                variant={isCompleted ? "success" : isCurrent ? "info" : "neutral"}
+                label={isCompleted ? "✓" : String(step.id)}
+                size="md"
+              />
+              <Text
+                size="xs"
+                fontWeight={isCurrent ? "semibold" : "normal"}
+                color={isCurrent ? "--color-text-primary" : "--color-text-secondary"}
               >
-                <Badge
-                  variant={isCompleted ? "success" : isCurrent ? "primary" : "default"}
-                  label={isCompleted ? "✓" : String(step.id)}
-                />
-                <Text
-                  size="xs"
-                  weight={isCurrent ? "semibold" : "regular"}
-                  color={isCurrent ? "primary" : "secondary"}
-                  textAlign="center"
-                >
-                  {step.title}
-                </Text>
-              </VStack>
-              {index < steps.length - 1 && (
-                <VStack
-                  flex={1}
-                  height="2px"
-                  backgroundColor={isPast ? t("--color-accent") : t("--color-border")}
-                  margin="0 0.5rem"
-                  alignItems="stretch"
-                />
-              )}
-            </React.Fragment>
-          );
-        })}
-      </HStack>
-    </VStack>
+                {step.title}
+              </Text>
+            </VStack>
+
+            {/* Connector */}
+            {index < steps.length - 1 && (
+              <div
+                style={{
+                  flex: 1,
+                  height: "2px",
+                  backgroundColor: isPast
+                    ? t("--color-accent")
+                    : t("--color-border"),
+                  margin: "0 0.5rem",
+                  transition: `background-color ${theme.tokens["--duration-fast"] || "150ms"}`,
+                }}
+              />
+            )}
+          </React.Fragment>
+        );
+      })}
+    </HStack>
   );
 };
 

@@ -8,7 +8,7 @@
  */
 
 import { useState, useCallback } from "react";
-import { useTheme, Badge, Button, HStack, VStack, Layout, Heading, Text } from "@astryxdesign/core";
+import { useTheme, Badge, Button, Heading, HStack, VStack, Layout, Text, SegmentedControl } from "@astryxdesign/core";
 import { PolicyList } from "../components/PolicyList";
 import { PolicyEditor } from "../components/PolicyEditor";
 import { TestPanel } from "../components/TestPanel";
@@ -137,21 +137,10 @@ export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
     setActiveView("test");
   }, []);
 
-  // Styles - Astryx components use spacing props instead of inline styles
-
   return (
-    <Layout
-      type="flex"
-      height="100vh"
-      backgroundColor={t("--color-background-body")}
-    >
+    <Layout gap={0} backgroundColor="--color-background-body">
       {/* Policy List Sidebar */}
-      <HStack
-        width="300px"
-        height="100%"
-        flexShrink={0}
-        alignItems="stretch"
-      >
+      <Layout.Sidebar width="300px" style={{ height: "100vh", flexShrink: 0 }}>
         <PolicyList
           selectedPolicyId={selectedPolicy?.id}
           onPolicySelect={handlePolicySelect}
@@ -159,23 +148,20 @@ export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
           onPolicyDelete={handlePolicyDelete}
           onNewPolicy={handleNewPolicy}
         />
-      </HStack>
+      </Layout.Sidebar>
 
       {/* Main Content Area */}
-      <VStack
-        flex={1}
-        alignItems="stretch"
-        overflow="hidden"
-      >
+      <Layout.Main style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
         {/* Header */}
         <HStack
-          padding="1rem 1.5rem"
-          backgroundColor={t("--color-background-surface")}
-          borderBottom={`1px solid ${t("--color-border")}`}
-          alignItems="center"
+          gap="md"
           justifyContent="space-between"
+          alignItems="center"
+          padding="md md md md"
+          backgroundColor="--color-background-surface"
+          borderBottom="1px solid --color-border"
         >
-          <Heading level={1} size="md">
+          <Heading level={1} size="lg" fontWeight="semibold" color="--color-text-primary">
             {selectedPolicy
               ? selectedPolicy.name
               : isCreatingNew
@@ -189,28 +175,26 @@ export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
 
         {/* Tab Navigation */}
         <HStack
-          padding="0.5rem 1.5rem"
-          backgroundColor={t("--color-background-surface")}
-          borderBottom={`1px solid ${t("--color-border")}`}
-          gap="0.25rem"
+          gap="xs"
+          padding="sm md"
+          backgroundColor="--color-background-surface"
+          borderBottom="1px solid --color-border"
         >
-          <Button
-            variant={activeView === "editor" ? "primary" : "secondary"}
-            onClick={() => setActiveView("editor")}
-            label="Policy Editor"
-          />
-          <Button
-            variant={activeView === "test" ? "primary" : "secondary"}
-            onClick={() => setActiveView("test")}
-            label="Test Panel"
+          <SegmentedControl
+            value={activeView}
+            onChange={(value) => setActiveView(value as PlaygroundView)}
+            options={[
+              { value: "editor", label: "Policy Editor" },
+              { value: "test", label: "Test Panel" },
+            ]}
           />
         </HStack>
 
         {/* Content */}
         <VStack
-          flex={1}
-          padding="1.5rem"
-          overflow="auto"
+          gap="md"
+          padding="lg"
+          style={{ flex: 1, overflowY: "auto" }}
           alignItems="stretch"
         >
           {activeView === "editor" ? (
@@ -226,13 +210,17 @@ export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
               />
             ) : (
               <VStack
+                gap="md"
                 alignItems="center"
                 justifyContent="center"
-                height="100%"
-                gap="1rem"
+                style={{ height: "100%" }}
               >
-                <Text size="lg" weight="semibold">편집할 정책을 선택하세요</Text>
-                <Text size="sm" color="secondary">사이드바에서 정책을 선택하거나 새 정책을 만드세요.</Text>
+                <Heading level={2} size="lg" fontWeight="semibold" color="--color-text-primary">
+                  편집할 정책을 선택하세요
+                </Heading>
+                <Text size="sm" color="--color-text-secondary">
+                  사이드바에서 정책을 선택하거나 새 정책을 만드세요.
+                </Text>
                 <Button
                   label="+ 새 정책 만들기"
                   variant="primary"
@@ -244,7 +232,7 @@ export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
             <TestPanel />
           )}
         </VStack>
-      </VStack>
+      </Layout.Main>
     </Layout>
   );
 };

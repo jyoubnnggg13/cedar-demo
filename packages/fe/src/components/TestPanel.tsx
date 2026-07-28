@@ -6,7 +6,7 @@
  */
 
 import { useState, useCallback, useEffect } from "react";
-import { useTheme, TextInput, Selector, Badge, Button, VStack, HStack, Heading, Text, CheckboxInput, Banner } from "@astryxdesign/core";
+import { useTheme, TextInput, Selector, Badge, Button, CheckboxInput, Heading, VStack, HStack, Text } from "@astryxdesign/core";
 import { useEvaluate } from "../hooks/useEvaluate";
 import { ResultDisplay } from "./ResultDisplay";
 import type { Principal, Resource, EvaluateRequest, EvaluateResponse } from "../types/evaluation";
@@ -110,104 +110,120 @@ export function TestPanel() {
     setResult(response);
   }, [principalRole, principalId, resourceType, resourceId, currentResource, selectedActions, evaluate]);
 
-  // Styles - Astryx components use spacing props instead of inline styles
+  // Styles removed - using Astryx components directly
 
   return (
     <VStack
-      padding="1.5rem"
-      borderRadius={t("--radius-container")}
-      backgroundColor={t("--color-background-surface")}
-      border={`1px solid ${t("--color-border")}`}
-      alignItems="stretch"
-      gap="1.5rem"
+      gap="lg"
+      padding="lg"
+      borderRadius="container"
+      backgroundColor="--color-background-surface"
+      border="1px solid --color-border"
     >
       {/* Header */}
-      <HStack
-        justifyContent="space-between"
-        alignItems="center"
-        paddingBottom="1rem"
-        borderBottom={`1px solid ${t("--color-border")}`}
-      >
-        <Heading level={2} size="lg">Authorization Test</Heading>
+      <HStack gap="md" justifyContent="space-between" alignItems="center">
+        <Heading level={2} size="xl" fontWeight="semibold" color="--color-text-primary">
+          Authorization Test
+        </Heading>
         <Badge variant="blue" label="Playground" />
       </HStack>
 
       {/* Request Configuration */}
-      <VStack alignItems="stretch" gap="1.5rem">
-        <Heading level={3} size="sm">Request Configuration</Heading>
+      <VStack gap="md">
+        <Heading level={3} size="sm" fontWeight="semibold" color="--color-text-primary">
+          Request Configuration
+        </Heading>
 
         {/* Principal */}
-        <VStack alignItems="stretch" gap="0.5rem">
-          <Text size="xs" weight="medium" textTransform="uppercase" letterSpacing="wider" color="secondary">Principal</Text>
-          <HStack gap="1rem" flexWrap="wrap">
-            <Selector
-              label="Role"
-              value={principalRole}
-              onChange={(value) => setPrincipalRole(value as Principal["role"])}
-              options={[
-                { value: "admin", label: "Admin" },
-                { value: "editor", label: "Editor" },
-                { value: "viewer", label: "Viewer" },
-              ]}
-              size="sm"
-              isLabelHidden
-            />
-            <Selector
-              label="User ID"
-              value={principalId}
-              onChange={(value) => setPrincipalId(value)}
-              options={SAMPLE_USERS[principalRole]?.map((userId) => ({ value: userId, label: userId })) || []}
-              size="sm"
-              isLabelHidden
-            />
+        <VStack gap="sm">
+          <Text size="xs" fontWeight="medium" color="--color-text-secondary" textTransform="uppercase" letterSpacing="wider">
+            Principal
+          </Text>
+          <HStack gap="md" wrap>
+            <VStack gap="xs" style={{ flex: 1, minWidth: "200px" }}>
+              <Selector
+                label="Role"
+                value={principalRole}
+                onChange={(value) => setPrincipalRole(value as Principal["role"])}
+                options={[
+                  { value: "admin", label: "Admin" },
+                  { value: "editor", label: "Editor" },
+                  { value: "viewer", label: "Viewer" },
+                ]}
+                size="sm"
+                isLabelHidden
+              />
+            </VStack>
+            <VStack gap="xs" style={{ flex: 1, minWidth: "200px" }}>
+              <Selector
+                label="User ID"
+                value={principalId}
+                onChange={(value) => setPrincipalId(value)}
+                options={SAMPLE_USERS[principalRole]?.map((userId) => ({ value: userId, label: userId })) || []}
+                size="sm"
+                isLabelHidden
+              />
+            </VStack>
           </HStack>
         </VStack>
 
         {/* Resource */}
-        <VStack alignItems="stretch" gap="0.5rem">
-          <Text size="xs" weight="medium" textTransform="uppercase" letterSpacing="wider" color="secondary">Resource</Text>
-          <HStack gap="1rem" flexWrap="wrap">
-            <Selector
-              label="Type"
-              value={resourceType}
-              onChange={(value) => setResourceType(value as Resource["type"])}
-              options={[
-                { value: "document", label: "Document" },
-                { value: "issue", label: "Issue" },
-              ]}
-              size="sm"
-              isLabelHidden
-            />
-            <Selector
-              label="Resource ID"
-              value={resourceId}
-              onChange={(value) => setResourceId(value)}
-              options={SAMPLE_RESOURCES[resourceType]?.map((resource) => ({ value: resource.id, label: resource.id })) || []}
-              size="sm"
-              isLabelHidden
-            />
+        <VStack gap="sm">
+          <Text size="xs" fontWeight="medium" color="--color-text-secondary" textTransform="uppercase" letterSpacing="wider">
+            Resource
+          </Text>
+          <HStack gap="md" wrap>
+            <VStack gap="xs" style={{ flex: 1, minWidth: "200px" }}>
+              <Selector
+                label="Type"
+                value={resourceType}
+                onChange={(value) => setResourceType(value as Resource["type"])}
+                options={[
+                  { value: "document", label: "Document" },
+                  { value: "issue", label: "Issue" },
+                ]}
+                size="sm"
+                isLabelHidden
+              />
+            </VStack>
+            <VStack gap="xs" style={{ flex: 1, minWidth: "200px" }}>
+              <Selector
+                label="Resource ID"
+                value={resourceId}
+                onChange={(value) => setResourceId(value)}
+                options={SAMPLE_RESOURCES[resourceType]?.map((resource) => ({ value: resource.id, label: resource.id })) || []}
+                size="sm"
+                isLabelHidden
+              />
+            </VStack>
           </HStack>
           {/* Resource Attributes (readonly) */}
-          <HStack gap="1rem" flexWrap="wrap" marginTop="0.75rem">
-            <TextInput
-              label="Owner"
-              value={currentResource?.ownerId || "-"}
-              isDisabled
-              isLabelHidden
-            />
-            <TextInput
-              label="isPublic"
-              value={currentResource?.attributes?.isPublic?.toString() || "false"}
-              isDisabled
-              isLabelHidden
-            />
+          <HStack gap="md" wrap>
+            <VStack gap="xs" style={{ flex: 1, minWidth: "120px" }}>
+              <TextInput
+                label="Owner"
+                value={currentResource?.ownerId || "-"}
+                isDisabled
+                isLabelHidden
+              />
+            </VStack>
+            <VStack gap="xs" style={{ flex: 1, minWidth: "120px" }}>
+              <TextInput
+                label="isPublic"
+                value={currentResource?.attributes?.isPublic?.toString() || "false"}
+                isDisabled
+                isLabelHidden
+              />
+            </VStack>
           </HStack>
         </VStack>
 
         {/* Action */}
-        <VStack alignItems="stretch" gap="0.5rem">
-          <Text size="xs" weight="medium" textTransform="uppercase" letterSpacing="wider" color="secondary">Action</Text>
-          <HStack gap="1rem" flexWrap="wrap">
+        <VStack gap="sm">
+          <Text size="xs" fontWeight="medium" color="--color-text-secondary" textTransform="uppercase" letterSpacing="wider">
+            Action
+          </Text>
+          <HStack gap="md" wrap>
             {ACTIONS.map((action) => (
               <CheckboxInput
                 key={action.value}
@@ -221,7 +237,7 @@ export function TestPanel() {
       </VStack>
 
       {/* Evaluate Button */}
-      <VStack alignItems="stretch" gap="0.5rem">
+      <VStack gap="sm">
         <Button
           label={loading ? "Evaluating..." : "Evaluate Request"}
           variant="primary"
@@ -231,18 +247,24 @@ export function TestPanel() {
           style={{ width: "100%" }}
         />
         {selectedActions.size === 0 && (
-          <Banner variant="warning">
+          <Text size="sm" color="--color-status-warning-fg" backgroundColor="--color-status-warning-bg" padding="sm" borderRadius="element">
             최소 1개의 액션을 선택해주세요.
-          </Banner>
+          </Text>
         )}
       </VStack>
 
       {/* Error Display */}
-      {error && <Banner variant="error">{error}</Banner>}
+      {error && (
+        <Text size="sm" color="--color-status-error-fg" backgroundColor="--color-status-error-bg" padding="sm" borderRadius="element">
+          {error}
+        </Text>
+      )}
 
       {/* Result Display */}
-      <VStack alignItems="stretch" gap="1rem">
-        <Heading level={3} size="sm">Result</Heading>
+      <VStack gap="md" alignItems="stretch">
+        <Heading level={3} size="sm" fontWeight="semibold" color="--color-text-primary">
+          Result
+        </Heading>
         <ResultDisplay result={result} />
       </VStack>
     </VStack>

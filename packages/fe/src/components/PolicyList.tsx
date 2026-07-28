@@ -5,7 +5,7 @@
  */
 
 import { useState, useEffect, useCallback } from "react";
-import { useTheme, Button, TextInput, VStack, HStack, Heading, Text, Banner, ClickableCard } from "@astryxdesign/core";
+import { useTheme, Button, TextInput, VStack, HStack, Text, Heading, Card } from "@astryxdesign/core";
 import type { Policy } from "../types/policy";
 
 interface PolicyListProps {
@@ -15,6 +15,70 @@ interface PolicyListProps {
   onPolicyDelete?: (policyId: string) => void;
   onNewPolicy?: () => void;
 }
+
+/**
+ * Policy list item component
+ */
+interface PolicyListItemProps {
+  policy: Policy;
+  isSelected: boolean;
+  onClick: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
+}
+
+const PolicyListItem: React.FC<PolicyListItemProps> = ({
+  policy,
+  isSelected,
+  onClick,
+  onEdit,
+  onDelete,
+}) => {
+  const theme = useTheme();
+  const t = (name: string) => theme.token(name);
+  const textColor = isSelected ? "white" : t("--color-text-primary");
+  const metaColor = isSelected ? "rgba(255,255,255,0.8)" : t("--color-text-secondary");
+
+  return (
+    <Card
+      padding="md"
+      backgroundColor={isSelected ? "--color-accent" : "transparent"}
+      borderRadius="element"
+      border={isSelected ? "--color-accent" : "transparent"}
+      style={{ marginBottom: "0.5rem", cursor: "pointer" }}
+      onClick={onClick}
+    >
+      <VStack gap="xs" alignItems="stretch">
+        <Text size="sm" fontWeight="medium" color={textColor} isTruncated>
+          {policy.name}
+        </Text>
+        <Text size="xs" color={metaColor} isTruncated>
+          {new Date(policy.createdAt).toLocaleDateString()} • {policy.description || "설명 없음"}
+        </Text>
+        {(onEdit || onDelete) && (
+          <HStack gap="xs" onClick={(e) => e.stopPropagation()}>
+            {onEdit && (
+              <Button
+                label="수정"
+                variant="ghost"
+                size="sm"
+                onClick={onEdit}
+              />
+            )}
+            {onDelete && (
+              <Button
+                label="삭제"
+                variant="ghost"
+                size="sm"
+                onClick={onDelete}
+              />
+            )}
+          </HStack>
+        )}
+      </VStack>
+    </Card>
+  );
+};
 
 /**
  * PolicyList Component
@@ -77,8 +141,6 @@ export const PolicyList: React.FC<PolicyListProps> = ({
     }
   };
 
-  // Styles - Astryx components use spacing props instead of inline styles
-
   // Mock data for demo
   function getMockPolicies(): Policy[] {
     return [
@@ -111,19 +173,17 @@ export const PolicyList: React.FC<PolicyListProps> = ({
 
   return (
     <VStack
-      height="100%"
+      gap={0}
       alignItems="stretch"
-      backgroundColor={t("--color-background-surface")}
-      borderRight={`1px solid ${t("--color-border")}`}
+      style={{ height: "100%", display: "flex", flexDirection: "column" }}
+      backgroundColor="--color-background-surface"
+      borderRight="1px solid --color-border"
     >
       {/* Header */}
-      <VStack
-        padding="1rem"
-        alignItems="stretch"
-        gap="0.75rem"
-        borderBottom={`1px solid ${t("--color-border")}`}
-      >
-        <Heading level={3} size="sm">Policies</Heading>
+      <VStack gap="md" padding="md" alignItems="stretch" borderBottom="1px solid --color-border">
+        <Heading level={3} size="sm" fontWeight="semibold" color="--color-text-primary">
+          Policies
+        </Heading>
         <TextInput
           label="Search Policies"
           placeholder="정책 검색..."
@@ -142,26 +202,27 @@ export const PolicyList: React.FC<PolicyListProps> = ({
 
       {/* List */}
       <VStack
-        flex={1}
-        overflow="auto"
-        padding="1rem"
+        gap="sm"
+        padding="md"
         alignItems="stretch"
-        gap="0.5rem"
+        style={{ flex: 1, overflowY: "auto" }}
       >
         {loading && (
-          <VStack padding="2rem 1rem" alignItems="center">
-            <Text color="secondary">로딩 중...</Text>
+          <VStack gap="md" padding="lg" alignItems="center">
+            <Text size="sm" color="--color-text-secondary">로딩 중...</Text>
           </VStack>
         )}
 
         {error && (
-          <Banner variant="error" margin="1rem">{error}</Banner>
+          <VStack gap="sm" padding="md" alignItems="stretch" backgroundColor="--color-status-error-bg" borderRadius="element">
+            <Text size="sm" color="--color-status-error-fg">{error}</Text>
+          </VStack>
         )}
 
         {!loading && !error && filteredPolicies.length === 0 && (
-          <VStack padding="2rem 1rem" alignItems="center" gap="0.5rem">
-            <Text color="secondary">정책이 없습니다.</Text>
-            <Text size="sm" color="secondary">
+          <VStack gap="md" padding="lg" alignItems="center">
+            <Text size="sm" color="--color-text-secondary">정책이 없습니다.</Text>
+            <Text size="xs" color="--color-text-secondary">
               "새 정책" 버튼을 클릭하여 첫 번째 정책을 만드세요.
             </Text>
           </VStack>
@@ -181,80 +242,5 @@ export const PolicyList: React.FC<PolicyListProps> = ({
           ))}
       </VStack>
     </VStack>
-  );
-};
-
-/**
- * Policy list item component
- */
-interface PolicyListItemProps {
-  policy: Policy;
-  isSelected: boolean;
-  onClick: () => void;
-  onEdit?: () => void;
-  onDelete?: () => void;
-}
-
-const PolicyListItem: React.FC<PolicyListItemProps> = ({
-  policy,
-  isSelected,
-  onClick,
-  onEdit,
-  onDelete,
-}) => {
-  const theme = useTheme();
-  const t = (name: string) => theme.token(name);
-
-  return (
-    <ClickableCard
-      padding="0.875rem 1rem"
-      borderRadius={t("--radius-element")}
-      backgroundColor={isSelected ? t("--color-accent") : "transparent"}
-      borderColor={isSelected ? t("--color-accent") : "transparent"}
-      onClick={onClick}
-    >
-      <VStack alignItems="stretch" gap="0.25rem">
-        <Text
-          size="sm"
-          weight="medium"
-          overflow="hidden"
-          textOverflow="ellipsis"
-          whiteSpace="nowrap"
-          color={isSelected ? "white" : "primary"}
-        >
-          {policy.name}
-        </Text>
-        <Text
-          size="xs"
-          color={isSelected ? "white" : "secondary"}
-          overflow="hidden"
-          textOverflow="ellipsis"
-          whiteSpace="nowrap"
-          opacity={isSelected ? 0.8 : 1}
-        >
-          {new Date(policy.createdAt).toLocaleDateString()} • {policy.description || "설명 없음"}
-        </Text>
-        {(onEdit || onDelete) && (
-          <HStack gap="0.25rem" marginTop="0.5rem" onClick={(e) => e.stopPropagation()}>
-            {onEdit && (
-              <Button
-                label="수정"
-                variant="ghost"
-                size="sm"
-                onClick={onEdit}
-              />
-            )}
-            {onDelete && (
-              <Button
-                label="삭제"
-                variant="ghost"
-                size="sm"
-                onClick={onDelete}
-              />
-            )}
-          </HStack>
-        )}
-      </VStack>
-    </ClickableCard>
   );
 };
