@@ -4,7 +4,7 @@
  * Displays the authorization evaluation result with visual badges.
  */
 
-import { Badge } from "@astryxdesign/core";
+import { useTheme, Badge } from "@astryxdesign/core";
 import type { EvaluateResponse } from "../types/evaluation";
 
 interface ResultDisplayProps {
@@ -12,6 +12,9 @@ interface ResultDisplayProps {
 }
 
 export function ResultDisplay({ result }: ResultDisplayProps) {
+  const theme = useTheme();
+  const t = (name: string) => theme.token(name);
+
   if (!result) {
     return null;
   }
