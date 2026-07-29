@@ -152,7 +152,8 @@ export function seedDatabase(): SeedResult {
         principalTypes: '["User"]',
         resourceTypes: '["*"]',
         actions: '["*"]',
-        conditions: null
+        conditions: null,
+        cedar_json: null
       },
       {
         policySetId: policySetIds[0],
@@ -162,7 +163,8 @@ export function seedDatabase(): SeedResult {
         principalTypes: '["User"]',
         resourceTypes: '["document", "api"]',
         actions: '["delete"]',
-        conditions: JSON.stringify({ "resource.classification": { eq: "confidential" } })
+        conditions: JSON.stringify({ "resource.classification": { eq: "confidential" } }),
+        cedar_json: null
       },
       {
         policySetId: policySetIds[1],
@@ -172,7 +174,8 @@ export function seedDatabase(): SeedResult {
         principalTypes: '["User"]',
         resourceTypes: '["*"]',
         actions: '["read"]',
-        conditions: null
+        conditions: null,
+        cedar_json: null
       },
       {
         policySetId: policySetIds[1],
@@ -182,7 +185,8 @@ export function seedDatabase(): SeedResult {
         principalTypes: '["User"]',
         resourceTypes: '["folder"]',
         actions: '["write"]',
-        conditions: JSON.stringify({ "resource.department": { eq: "engineering" } })
+        conditions: JSON.stringify({ "resource.department": { eq: "engineering" } }),
+        cedar_json: null
       },
       {
         policySetId: policySetIds[2],
@@ -192,7 +196,8 @@ export function seedDatabase(): SeedResult {
         principalTypes: '["User"]',
         resourceTypes: '["document"]',
         actions: '["read"]',
-        conditions: JSON.stringify({ "resource.classification": { eq: "public" } })
+        conditions: JSON.stringify({ "resource.classification": { eq: "public" } }),
+        cedar_json: null
       }
     ];
 
@@ -266,6 +271,7 @@ export function seedDatabase(): SeedResult {
         resource_types: p.resourceTypes,
         actions: p.actions,
         conditions: p.conditions,
+        cedar_json: p.cedar_json,
         created_at: '',
         updated_at: ''
       }))
