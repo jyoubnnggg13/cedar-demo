@@ -1,6 +1,6 @@
 /**
  * Playground Page
- * 
+ *
  * 메인 Playground 레이아웃:
  * - 좌측 사이드바: Policy List
  * - 우측 메인 콘텐츠: Policy Editor / Test Panel 전환
