@@ -6,7 +6,7 @@
  */
 
 import { policyRepository } from '../db/index.js';
-import type { Policy, ParsedPolicy } from '../types/index.js';
+import type { Policy, ParsedPolicy } from '../db/index.js';
 
 /**
  * Parse policy from database row to structured format

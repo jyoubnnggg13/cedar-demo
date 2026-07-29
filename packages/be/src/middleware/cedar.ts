@@ -116,7 +116,11 @@ export function cedarMiddleware(options: {
 
     if (result.decision === 'DENY') {
       if (onDeny) {
-        onDeny(result, req);
+        onDeny({
+          decision: result.decision,
+          matchedPolicy: result.matchedPolicy,
+          reason: result.reason
+        }, req);
       }
       res.status(403).json({
         error: 'Forbidden',
