@@ -6,7 +6,7 @@
  */
 
 import { useState, useCallback, useEffect } from "react";
-import { useTheme, TextInput, Selector, Badge, Button, CheckboxInput, Heading, VStack, HStack, Text } from "@astryxdesign/core";
+import { TextInput, Selector, Badge, Button, CheckboxInput, Heading, VStack, HStack, Text } from "@astryxdesign/core";
 import { useEvaluate } from "../hooks/useEvaluate";
 import { ResultDisplay } from "./ResultDisplay";
 import type { Principal, Resource, EvaluateRequest, EvaluateResponse } from "../types/evaluation";
@@ -39,8 +39,6 @@ const ACTIONS: Array<{ value: "read" | "write" | "delete"; label: string }> = [
 ];
 
 export function TestPanel() {
-  const theme = useTheme();
-  const t = (name: string) => theme.token(name);
   const { evaluate, loading, error } = useEvaluate();
 
   // Form state
@@ -110,37 +108,33 @@ export function TestPanel() {
     setResult(response);
   }, [principalRole, principalId, resourceType, resourceId, currentResource, selectedActions, evaluate]);
 
-  // Styles removed - using Astryx components directly
-
   return (
     <VStack
-      gap="lg"
-      padding="lg"
-      borderRadius="container"
-      backgroundColor="--color-background-surface"
-      border="1px solid --color-border"
+      gap={4}
+      padding={4}
+      style={{ borderRadius: "var(--radius-container)", backgroundColor: "var(--color-background-surface)", border: "1px solid var(--color-border)" }}
     >
       {/* Header */}
-      <HStack gap="md" justifyContent="space-between" alignItems="center">
-        <Heading level={2} size="xl" fontWeight="semibold" color="--color-text-primary">
+      <HStack gap={2} justify="between" align="center">
+        <Heading level={2} color="primary">
           Authorization Test
         </Heading>
         <Badge variant="blue" label="Playground" />
       </HStack>
 
       {/* Request Configuration */}
-      <VStack gap="md">
-        <Heading level={3} size="sm" fontWeight="semibold" color="--color-text-primary">
+      <VStack gap={2}>
+        <Heading level={3} color="primary">
           Request Configuration
         </Heading>
 
         {/* Principal */}
-        <VStack gap="sm">
-          <Text size="xs" fontWeight="medium" color="--color-text-secondary" textTransform="uppercase" letterSpacing="wider">
+        <VStack gap={1}>
+          <Text size="xsm" weight="medium" color="secondary">
             Principal
           </Text>
-          <HStack gap="md" wrap>
-            <VStack gap="xs" style={{ flex: 1, minWidth: "200px" }}>
+          <HStack gap={2} wrap="wrap">
+            <VStack gap={1} style={{ flex: 1, minWidth: "200px" }}>
               <Selector
                 label="Role"
                 value={principalRole}
@@ -154,7 +148,7 @@ export function TestPanel() {
                 isLabelHidden
               />
             </VStack>
-            <VStack gap="xs" style={{ flex: 1, minWidth: "200px" }}>
+            <VStack gap={1} style={{ flex: 1, minWidth: "200px" }}>
               <Selector
                 label="User ID"
                 value={principalId}
@@ -168,12 +162,12 @@ export function TestPanel() {
         </VStack>
 
         {/* Resource */}
-        <VStack gap="sm">
-          <Text size="xs" fontWeight="medium" color="--color-text-secondary" textTransform="uppercase" letterSpacing="wider">
+        <VStack gap={1}>
+          <Text size="xsm" weight="medium" color="secondary">
             Resource
           </Text>
-          <HStack gap="md" wrap>
-            <VStack gap="xs" style={{ flex: 1, minWidth: "200px" }}>
+          <HStack gap={2} wrap="wrap">
+            <VStack gap={1} style={{ flex: 1, minWidth: "200px" }}>
               <Selector
                 label="Type"
                 value={resourceType}
@@ -186,7 +180,7 @@ export function TestPanel() {
                 isLabelHidden
               />
             </VStack>
-            <VStack gap="xs" style={{ flex: 1, minWidth: "200px" }}>
+            <VStack gap={1} style={{ flex: 1, minWidth: "200px" }}>
               <Selector
                 label="Resource ID"
                 value={resourceId}
@@ -198,8 +192,8 @@ export function TestPanel() {
             </VStack>
           </HStack>
           {/* Resource Attributes (readonly) */}
-          <HStack gap="md" wrap>
-            <VStack gap="xs" style={{ flex: 1, minWidth: "120px" }}>
+          <HStack gap={2} wrap="wrap">
+            <VStack gap={1} style={{ flex: 1, minWidth: "120px" }}>
               <TextInput
                 label="Owner"
                 value={currentResource?.ownerId || "-"}
@@ -207,7 +201,7 @@ export function TestPanel() {
                 isLabelHidden
               />
             </VStack>
-            <VStack gap="xs" style={{ flex: 1, minWidth: "120px" }}>
+            <VStack gap={1} style={{ flex: 1, minWidth: "120px" }}>
               <TextInput
                 label="isPublic"
                 value={currentResource?.attributes?.isPublic?.toString() || "false"}
@@ -219,16 +213,16 @@ export function TestPanel() {
         </VStack>
 
         {/* Action */}
-        <VStack gap="sm">
-          <Text size="xs" fontWeight="medium" color="--color-text-secondary" textTransform="uppercase" letterSpacing="wider">
+        <VStack gap={1}>
+          <Text size="xsm" weight="medium" color="secondary">
             Action
           </Text>
-          <HStack gap="md" wrap>
+          <HStack gap={2} wrap="wrap">
             {ACTIONS.map((action) => (
               <CheckboxInput
                 key={action.value}
                 label={action.label}
-                isChecked={selectedActions.has(action.value)}
+                value={selectedActions.has(action.value) as boolean}
                 onChange={() => handleActionToggle(action.value)}
               />
             ))}
@@ -237,7 +231,7 @@ export function TestPanel() {
       </VStack>
 
       {/* Evaluate Button */}
-      <VStack gap="sm">
+      <VStack gap={1}>
         <Button
           label={loading ? "Evaluating..." : "Evaluate Request"}
           variant="primary"
@@ -247,7 +241,7 @@ export function TestPanel() {
           style={{ width: "100%" }}
         />
         {selectedActions.size === 0 && (
-          <Text size="sm" color="--color-status-warning-fg" backgroundColor="--color-status-warning-bg" padding="sm" borderRadius="element">
+          <Text size="sm" color="accent" style={{ backgroundColor: "var(--color-status-warning-bg)", padding: "var(--spacing-1)", borderRadius: "var(--radius-element)" }}>
             최소 1개의 액션을 선택해주세요.
           </Text>
         )}
@@ -255,14 +249,14 @@ export function TestPanel() {
 
       {/* Error Display */}
       {error && (
-        <Text size="sm" color="--color-status-error-fg" backgroundColor="--color-status-error-bg" padding="sm" borderRadius="element">
+        <Text size="sm" color="accent" style={{ backgroundColor: "var(--color-status-error-bg)", padding: "var(--spacing-1)", borderRadius: "var(--radius-element)" }}>
           {error}
         </Text>
       )}
 
       {/* Result Display */}
-      <VStack gap="md" alignItems="stretch">
-        <Heading level={3} size="sm" fontWeight="semibold" color="--color-text-primary">
+      <VStack gap={2} align="stretch">
+        <Heading level={3} color="primary">
           Result
         </Heading>
         <ResultDisplay result={result} />

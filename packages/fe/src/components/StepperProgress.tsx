@@ -1,5 +1,5 @@
 import React from "react";
-import { useTheme, HStack, Text, Badge } from "@astryxdesign/core";
+import { HStack, VStack, Text, Badge } from "@astryxdesign/core";
 import type { Step } from "../types/policy";
 
 /**
@@ -24,17 +24,12 @@ export const StepperProgress: React.FC<StepperProgressProps> = ({
   onStepClick,
   disabled = false,
 }) => {
-  const theme = useTheme();
-  const t = (name: string) => theme.token(name);
-
   return (
     <HStack
-      gap="sm"
-      padding="md"
-      justifyContent="center"
-      backgroundColor="--color-background-muted"
-      borderRadius="element"
-      marginBottom="lg"
+      gap={1}
+      padding={2}
+      justify="center"
+      style={{ backgroundColor: "var(--color-background-muted)", borderRadius: "var(--radius-element)", marginBottom: "var(--spacing-4)" }}
     >
       {steps.map((step, index) => {
         const isCompleted = completedSteps.includes(index);
@@ -46,8 +41,8 @@ export const StepperProgress: React.FC<StepperProgressProps> = ({
           <React.Fragment key={step.id}>
             {/* Step */}
             <VStack
-              gap="sm"
-              alignItems="center"
+              gap={1}
+              align="center"
               onClick={() => isClickable && onStepClick(index)}
               role="button"
               tabIndex={disabled ? -1 : 0}
@@ -65,12 +60,11 @@ export const StepperProgress: React.FC<StepperProgressProps> = ({
               <Badge
                 variant={isCompleted ? "success" : isCurrent ? "info" : "neutral"}
                 label={isCompleted ? "✓" : String(step.id)}
-                size="md"
               />
               <Text
-                size="xs"
-                fontWeight={isCurrent ? "semibold" : "normal"}
-                color={isCurrent ? "--color-text-primary" : "--color-text-secondary"}
+                size="xsm"
+                weight={isCurrent ? "semibold" : "normal"}
+                color={isCurrent ? "primary" : "secondary"}
               >
                 {step.title}
               </Text>
@@ -83,10 +77,9 @@ export const StepperProgress: React.FC<StepperProgressProps> = ({
                   flex: 1,
                   height: "2px",
                   backgroundColor: isPast
-                    ? t("--color-accent")
-                    : t("--color-border"),
+                    ? "--color-accent"
+                    : "--color-border",
                   margin: "0 0.5rem",
-                  transition: `background-color ${theme.tokens["--duration-fast"] || "150ms"}`,
                 }}
               />
             )}

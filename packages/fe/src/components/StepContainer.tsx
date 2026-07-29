@@ -1,5 +1,5 @@
 import React from "react";
-import { useTheme, Button, VStack, HStack, Heading, Text } from "@astryxdesign/core";
+import { Button, VStack, HStack, Heading, Text } from "@astryxdesign/core";
 
 /**
  * StepContainer Props
@@ -27,33 +27,29 @@ export const StepContainer: React.FC<StepContainerProps> = ({
   error,
   children,
 }) => {
-  const theme = useTheme();
-  const t = (name: string) => theme.token(name);
-  const borderColor = error ? "#ef4444" : t("--color-border");
+  const borderColor = error ? "#ef4444" : "var(--color-border)";
 
   return (
     <VStack
-      gap="md"
-      padding="lg"
-      borderRadius="element"
-      backgroundColor="--color-background-surface"
-      border={`1px solid ${borderColor}`}
-      alignItems="stretch"
+      gap={2}
+      padding={4}
+      style={{ borderRadius: "var(--radius-element)", backgroundColor: "var(--color-background-surface)", border: `1px solid ${borderColor}` }}
+      align="stretch"
     >
       {/* Header */}
-      <HStack gap="md" justifyContent="space-between" wrap alignItems="flex-start">
-        <VStack gap="xs" alignItems="flex-start">
-          <Heading level={3} size="base" fontWeight="semibold" color="--color-text-primary">
+      <HStack gap={2} justify="between" wrap="wrap" align="start">
+        <VStack gap={1} align="start">
+          <Heading level={3} color="primary">
             {title}
           </Heading>
           {subtitle && (
-            <Text size="xs" color="--color-text-secondary">
+            <Text size="xsm" color="secondary">
               {subtitle}
             </Text>
           )}
         </VStack>
         {showBulkActions && (
-          <HStack gap="sm">
+          <HStack gap={1}>
             <Button
               label="Select All"
               variant="primary"
@@ -71,13 +67,13 @@ export const StepContainer: React.FC<StepContainerProps> = ({
       </HStack>
 
       {/* Content */}
-      <HStack gap="md" wrap justifyContent="flex-start">
+      <HStack gap={2} wrap="wrap" justify="start">
         {children}
       </HStack>
 
       {/* Error */}
       {error && (
-        <Text size="sm" color="--color-status-error-fg" backgroundColor="--color-status-error-bg" padding="sm" borderRadius="element">
+        <Text size="sm" color="accent" style={{ backgroundColor: "var(--color-status-error-bg)", padding: "var(--spacing-1)", borderRadius: "var(--radius-element)" }}>
           {error}
         </Text>
       )}
