@@ -8,7 +8,7 @@
  */
 
 import { useState, useCallback } from "react";
-import { useTheme, Badge, Button, Heading, HStack, VStack, Layout, Text, SegmentedControl } from "@astryxdesign/core";
+import { Badge, Button, Heading, HStack, VStack, Text, SegmentedControl, SegmentedControlItem, Card } from "@astryxdesign/core";
 import { PolicyList } from "../components/PolicyList";
 import { PolicyEditor } from "../components/PolicyEditor";
 import { TestPanel } from "../components/TestPanel";
@@ -31,9 +31,6 @@ export interface PlaygroundProps {
  * Playground Page Component
  */
 export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
-  const theme = useTheme();
-  const t = (name: string) => theme.token(name);
-
   // State
   const [selectedPolicy, setSelectedPolicy] = useState<Policy | null>(initialPolicy || null);
   const [activeView, setActiveView] = useState<PlaygroundView>("test");
@@ -138,9 +135,9 @@ export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
   }, []);
 
   return (
-    <Layout gap={0} backgroundColor="--color-background-body">
+    <HStack gap={0} align="start" style={{ height: "100vh", backgroundColor: "var(--color-background-body)" }}>
       {/* Policy List Sidebar */}
-      <Layout.Sidebar width="300px" style={{ height: "100vh", flexShrink: 0 }}>
+      <Card style={{ width: "300px", height: "100vh", flexShrink: 0, overflowY: "auto" }}>
         <PolicyList
           selectedPolicyId={selectedPolicy?.id}
           onPolicySelect={handlePolicySelect}
@@ -148,20 +145,19 @@ export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
           onPolicyDelete={handlePolicyDelete}
           onNewPolicy={handleNewPolicy}
         />
-      </Layout.Sidebar>
+      </Card>
 
       {/* Main Content Area */}
-      <Layout.Main style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+      <VStack gap={0} style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
         {/* Header */}
         <HStack
-          gap="md"
-          justifyContent="space-between"
-          alignItems="center"
-          padding="md md md md"
-          backgroundColor="--color-background-surface"
-          borderBottom="1px solid --color-border"
+          gap={4}
+          justify="between"
+          align="center"
+          padding={4}
+          style={{ backgroundColor: "var(--color-background-surface)", borderBottom: "1px solid var(--color-border)" }}
         >
-          <Heading level={1} size="lg" fontWeight="semibold" color="--color-text-primary">
+          <Heading level={1} color="primary">
             {selectedPolicy
               ? selectedPolicy.name
               : isCreatingNew
@@ -175,27 +171,26 @@ export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
 
         {/* Tab Navigation */}
         <HStack
-          gap="xs"
-          padding="sm md"
-          backgroundColor="--color-background-surface"
-          borderBottom="1px solid --color-border"
+          gap={2}
+          padding={2}
+          style={{ backgroundColor: "var(--color-background-surface)", borderBottom: "1px solid var(--color-border)" }}
         >
           <SegmentedControl
             value={activeView}
             onChange={(value) => setActiveView(value as PlaygroundView)}
-            options={[
-              { value: "editor", label: "Policy Editor" },
-              { value: "test", label: "Test Panel" },
-            ]}
-          />
+            label="View mode"
+          >
+            <SegmentedControlItem value="editor" label="Policy Editor" />
+            <SegmentedControlItem value="test" label="Test Panel" />
+          </SegmentedControl>
         </HStack>
 
         {/* Content */}
         <VStack
-          gap="md"
-          padding="lg"
+          gap={4}
+          padding={5}
           style={{ flex: 1, overflowY: "auto" }}
-          alignItems="stretch"
+          align="stretch"
         >
           {activeView === "editor" ? (
             selectedPolicy || isCreatingNew ? (
@@ -210,15 +205,15 @@ export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
               />
             ) : (
               <VStack
-                gap="md"
-                alignItems="center"
-                justifyContent="center"
+                gap={4}
+                align="center"
+                justify="center"
                 style={{ height: "100%" }}
               >
-                <Heading level={2} size="lg" fontWeight="semibold" color="--color-text-primary">
+                <Heading level={2} color="primary">
                   편집할 정책을 선택하세요
                 </Heading>
-                <Text size="sm" color="--color-text-secondary">
+                <Text size="sm" color="secondary">
                   사이드바에서 정책을 선택하거나 새 정책을 만드세요.
                 </Text>
                 <Button
@@ -232,8 +227,8 @@ export const Playground: React.FC<PlaygroundProps> = ({ initialPolicy }) => {
             <TestPanel />
           )}
         </VStack>
-      </Layout.Main>
-    </Layout>
+      </VStack>
+    </HStack>
   );
 };
 

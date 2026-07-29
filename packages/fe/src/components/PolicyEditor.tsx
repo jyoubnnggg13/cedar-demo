@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from "react";
-import { useTheme, TextInput, TextArea, CodeBlock, Button, VStack, HStack, Heading, Text } from "@astryxdesign/core";
+import { useTheme, TextInput, TextArea, CodeBlock, Button, VStack, HStack, Heading } from "@astryxdesign/core";
 import { StepperProgress } from "./StepperProgress";
 import { SelectableCard } from "./SelectionCard";
 import { StepContainer } from "./StepContainer";
@@ -29,7 +29,6 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
   initialData,
 }) => {
   const theme = useTheme();
-  const t = (name: string) => theme.token(name);
 
   // 스텝 정의
   const steps: Step[] = [
@@ -397,17 +396,14 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
 
   return (
     <VStack
-      gap="lg"
-      padding="lg"
-      borderRadius="container"
-      backgroundColor="--color-background-surface"
-      border="1px solid --color-border"
-      style={{ maxWidth: "800px", margin: "0 auto" }}
-      alignItems="stretch"
+      gap={4}
+      padding={4}
+      style={{ maxWidth: "800px", margin: "0 auto", borderRadius: "var(--radius-container)", backgroundColor: "var(--color-background-surface)", border: "1px solid var(--color-border)" }}
+      align="stretch"
     >
       {/* Header */}
-      <HStack gap="md" alignItems="center" borderBottom="1px solid --color-border" paddingBottom="md">
-        <Heading level={2} size="lg" fontWeight="semibold" color="--color-text-primary">
+      <HStack gap={3} align="center" style={{ borderBottom: "1px solid var(--color-border)", paddingBottom: "var(--spacing-2)" }}>
+        <Heading level={2} color="primary">
           Policy Editor
         </Heading>
       </HStack>
@@ -422,7 +418,7 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
       {renderStepContent()}
 
       {/* Navigation */}
-      <HStack gap="md" justifyContent="space-between">
+      <HStack gap={3} justify="between">
         <Button
           label="← Previous"
           variant="secondary"
@@ -442,14 +438,12 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
 
       {/* Preview */}
       <VStack
-        gap="sm"
-        padding="md"
-        backgroundColor="--color-background-muted"
-        borderRadius="element"
-        border="1px solid --color-border"
-        alignItems="stretch"
+        gap={1}
+        padding={2}
+        style={{ backgroundColor: "var(--color-background-muted)", borderRadius: "var(--radius-element)", border: "1px solid var(--color-border)" }}
+        align="stretch"
       >
-        <Heading level={3} size="sm" fontWeight="semibold" color="--color-text-primary">
+        <Heading level={3} color="primary">
           Cedar JSON Preview
         </Heading>
         <CodeBlock
@@ -464,7 +458,7 @@ export const PolicyEditor: React.FC<PolicyEditorProps> = ({
       </VStack>
 
       {/* Footer */}
-      <HStack gap="md" justifyContent="space-between" borderTop="1px solid --color-border" paddingTop="md">
+      <HStack gap={3} justify="between" style={{ borderTop: "1px solid var(--color-border)", paddingTop: "var(--spacing-2)" }}>
         <Button
           label="Cancel"
           variant="secondary"

@@ -5,7 +5,7 @@
  */
 
 import { useState, useEffect, useCallback } from "react";
-import { useTheme, Button, TextInput, VStack, HStack, Text, Heading, Card } from "@astryxdesign/core";
+import { Button, TextInput, VStack, HStack, Text, Heading, Card } from "@astryxdesign/core";
 import type { Policy } from "../types/policy";
 
 interface PolicyListProps {
@@ -34,29 +34,22 @@ const PolicyListItem: React.FC<PolicyListItemProps> = ({
   onEdit,
   onDelete,
 }) => {
-  const theme = useTheme();
-  const t = (name: string) => theme.token(name);
-  const textColor = isSelected ? "white" : t("--color-text-primary");
-  const metaColor = isSelected ? "rgba(255,255,255,0.8)" : t("--color-text-secondary");
-
   return (
     <Card
-      padding="md"
-      backgroundColor={isSelected ? "--color-accent" : "transparent"}
-      borderRadius="element"
-      border={isSelected ? "--color-accent" : "transparent"}
+      padding={2}
+      variant={isSelected ? "blue" : "default"}
       style={{ marginBottom: "0.5rem", cursor: "pointer" }}
       onClick={onClick}
     >
-      <VStack gap="xs" alignItems="stretch">
-        <Text size="sm" fontWeight="medium" color={textColor} isTruncated>
+      <VStack gap={1} align="stretch">
+        <Text size="sm" weight="medium" color={isSelected ? "accent" : "primary"}>
           {policy.name}
         </Text>
-        <Text size="xs" color={metaColor} isTruncated>
+        <Text size="xsm" color={isSelected ? "accent" : "secondary"}>
           {new Date(policy.createdAt).toLocaleDateString()} • {policy.description || "설명 없음"}
         </Text>
         {(onEdit || onDelete) && (
-          <HStack gap="xs" onClick={(e) => e.stopPropagation()}>
+          <HStack gap={1} onClick={(e) => e.stopPropagation()}>
             {onEdit && (
               <Button
                 label="수정"
@@ -90,9 +83,6 @@ export const PolicyList: React.FC<PolicyListProps> = ({
   onPolicyDelete,
   onNewPolicy,
 }) => {
-  const theme = useTheme();
-  const t = (name: string) => theme.token(name);
-
   // State
   const [policies, setPolicies] = useState<Policy[]>([]);
   const [loading, setLoading] = useState(true);
@@ -174,14 +164,12 @@ export const PolicyList: React.FC<PolicyListProps> = ({
   return (
     <VStack
       gap={0}
-      alignItems="stretch"
-      style={{ height: "100%", display: "flex", flexDirection: "column" }}
-      backgroundColor="--color-background-surface"
-      borderRight="1px solid --color-border"
+      align="stretch"
+      style={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: "var(--color-background-surface)", borderRight: "1px solid var(--color-border)" }}
     >
       {/* Header */}
-      <VStack gap="md" padding="md" alignItems="stretch" borderBottom="1px solid --color-border">
-        <Heading level={3} size="sm" fontWeight="semibold" color="--color-text-primary">
+      <VStack gap={2} padding={2} align="stretch" style={{ borderBottom: "1px solid var(--color-border)" }}>
+        <Heading level={3} color="primary">
           Policies
         </Heading>
         <TextInput
@@ -202,27 +190,27 @@ export const PolicyList: React.FC<PolicyListProps> = ({
 
       {/* List */}
       <VStack
-        gap="sm"
-        padding="md"
-        alignItems="stretch"
+        gap={1}
+        padding={2}
+        align="stretch"
         style={{ flex: 1, overflowY: "auto" }}
       >
         {loading && (
-          <VStack gap="md" padding="lg" alignItems="center">
-            <Text size="sm" color="--color-text-secondary">로딩 중...</Text>
+          <VStack gap={2} padding={4} align="center">
+            <Text size="sm" color="secondary">로딩 중...</Text>
           </VStack>
         )}
 
         {error && (
-          <VStack gap="sm" padding="md" alignItems="stretch" backgroundColor="--color-status-error-bg" borderRadius="element">
-            <Text size="sm" color="--color-status-error-fg">{error}</Text>
+          <VStack gap={1} padding={2} align="stretch" style={{ backgroundColor: "var(--color-status-error-bg)", borderRadius: "var(--radius-element)" }}>
+            <Text size="sm" color="accent">{error}</Text>
           </VStack>
         )}
 
         {!loading && !error && filteredPolicies.length === 0 && (
-          <VStack gap="md" padding="lg" alignItems="center">
-            <Text size="sm" color="--color-text-secondary">정책이 없습니다.</Text>
-            <Text size="xs" color="--color-text-secondary">
+          <VStack gap={2} padding={4} align="center">
+            <Text size="sm" color="secondary">정책이 없습니다.</Text>
+            <Text size="xsm" color="secondary">
               "새 정책" 버튼을 클릭하여 첫 번째 정책을 만드세요.
             </Text>
           </VStack>
